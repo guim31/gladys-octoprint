@@ -30,6 +30,17 @@ Gladys before reporting a problem.
 
 In scope: the code of this repository and the Docker image it publishes.
 
+What the integration holds:
+
+- the OctoPrint API keys, in the Gladys configuration (`secret` fields, never
+  sent back to the browser by Gladys) — never in `/data`, never in the logs;
+- `/data/octoprint-state.json`: what each configured printer has (nozzles,
+  heated bed and chamber, webcam, instance name), no secret;
+- network: HTTP(S) and WebSocket connections to the OctoPrint addresses the
+  administrator entered, on the local network. No other outbound connection.
+  Redirects are not followed, so a key is never sent to another address.
+
 Out of scope: Gladys Assistant itself (see its
 [security policy](https://github.com/GladysAssistant/Gladys/security/policy)),
-and the third-party services and devices the integration talks to.
+and OctoPrint itself (see its
+[security policy](https://github.com/OctoPrint/OctoPrint/security/policy)).

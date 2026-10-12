@@ -1,0 +1,30 @@
+{
+  "job": {
+    "averagePrintTime": null,
+    "estimatedPrintTime": 66.38892742497171,
+    "filament": {
+      "tool0": {
+        "length": 5.9,
+        "volume": 0
+      }
+    },
+    "file": {
+      "date": 1791832233,
+      "display": "benchy-mini.gcode",
+      "name": "benchy-mini.gcode",
+      "origin": "local",
+      "path": "benchy-mini.gcode",
+      "size": 1959
+    },
+    "lastPrintTime": null,
+    "user": "admin"
+  },
+  "progress": {
+    "completion": null,
+    "filepos": null,
+    "printTime": null,
+    "printTimeLeft": null,
+    "printTimeLeftOrigin": null
+  },
+  "state": "Operational"
+}

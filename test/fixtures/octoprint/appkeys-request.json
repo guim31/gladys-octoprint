@@ -1,0 +1,4 @@
+{
+  "app_token": "TOKEN-0123456789abcdefghijklmnopqrstuvwxyzABC",
+  "auth_dialog": "http://192.0.2.10/plugin/appkeys/auth/TOKEN-0123456789abcdefghijklmnopqrstuvwxyzABC"
+}

@@ -1,177 +1,875 @@
 {
   "manifest_version": 1,
   "type": "device",
-  "name": "Demo Devices Template",
+  "name": "OctoPrint",
   "description": {
-    "en": "Starter template showing sensors, a switch, a dimmable light and a smart plug.",
-    "fr": "Template de démarrage : capteurs, interrupteur, lampe variable et prise connectée."
+    "en": "Follow and control your 3D prints in OctoPrint: progress, temperatures, alerts.",
+    "fr": "Suivez et pilotez vos impressions 3D OctoPrint : progression, températures, alertes.",
+    "de": "Verfolge und steuere deine 3D-Drucke in OctoPrint: Fortschritt, Temperaturen, Alarme.",
+    "es": "Siga y controle sus impresiones 3D en OctoPrint: progreso, temperaturas, alertas."
   },
   "version": "1.0.0",
-  "docker_image": "ghcr.io/gladysassistant/integration-template-js:1.0.0",
+  "docker_image": "ghcr.io/guim31/gladys-octoprint:1.0.0",
   "gladys_version": ">=5.1.0",
-  "cover_image": "https://raw.githubusercontent.com/GladysAssistant/integration-template-js/master/cover.png",
-  "categories": ["lighting", "security", "environment"],
-  "transports": ["local", "cloud"],
+  "cover_image": "https://raw.githubusercontent.com/guim31/gladys-octoprint/main/cover.png",
+  "categories": ["appliances"],
+  "transports": ["local"],
   "config_schema": [
     {
       "key": "intro",
       "type": "section",
-      "label": { "en": "Getting started", "fr": "Pour commencer" },
+      "label": {
+        "en": "Connect your OctoPrint",
+        "fr": "Connecter votre OctoPrint",
+        "de": "Verbinde dein OctoPrint",
+        "es": "Conecte su OctoPrint"
+      },
       "description": {
-        "en": "The demo weather station reads real data from the free Open-Meteo API: pick the coordinates to observe. No account, no API key.",
-        "fr": "La station météo de démonstration lit de vraies données via l'API gratuite Open-Meteo : choisissez les coordonnées à observer. Pas de compte, pas de clé d'API."
+        "en": "Enter the address of OctoPrint as you open it in your browser (an IP address works best), save, then click Connect and approve the request in OctoPrint. Or paste an API key from OctoPrint (Settings, Application Keys). Up to three printers.",
+        "fr": "Saisissez l'adresse d'OctoPrint telle que vous l'ouvrez dans votre navigateur (une adresse IP de préférence), enregistrez, puis cliquez sur Connecter et acceptez la demande dans OctoPrint. Ou collez une clé d'API d'OctoPrint (Paramètres, Application Keys). Jusqu'à trois imprimantes.",
+        "de": "Gib die Adresse von OctoPrint ein, wie du sie im Browser öffnest (am besten eine IP-Adresse), speichere, klicke dann auf Verbinden und bestätige die Anfrage in OctoPrint. Oder füge einen API-Schlüssel aus OctoPrint ein (Einstellungen, Application Keys). Bis zu drei Drucker.",
+        "es": "Introduzca la dirección de OctoPrint tal como la abre en su navegador (mejor una dirección IP), guarde, haga clic en Conectar y acepte la solicitud en OctoPrint. O pegue una clave de API de OctoPrint (Ajustes, Application Keys). Hasta tres impresoras."
       },
       "links": [
         {
-          "url": "https://open-meteo.com/en/docs",
-          "label": { "en": "Open-Meteo documentation", "fr": "Documentation Open-Meteo" }
+          "url": "https://docs.octoprint.org/en/master/bundledplugins/appkeys.html",
+          "label": {
+            "en": "OctoPrint Application Keys",
+            "fr": "Application Keys d'OctoPrint",
+            "de": "Application Keys von OctoPrint",
+            "es": "Application Keys de OctoPrint"
+          }
         }
       ]
     },
     {
-      "key": "latitude",
-      "type": "number",
-      "label": { "en": "Latitude", "fr": "Latitude" },
-      "description": {
-        "en": "Latitude used for the demo weather sensor.",
-        "fr": "Latitude utilisée par le capteur météo de démonstration."
+      "key": "url_1",
+      "type": "string",
+      "label": {
+        "en": "OctoPrint address",
+        "fr": "Adresse d'OctoPrint",
+        "de": "OctoPrint-Adresse",
+        "es": "Dirección de OctoPrint"
       },
-      "placeholder": { "en": "e.g. 48.8566", "fr": "ex. 48.8566" },
+      "placeholder": {
+        "en": "e.g. http://192.168.1.50",
+        "fr": "ex. http://192.168.1.50",
+        "de": "z. B. http://192.168.1.50",
+        "es": "p. ej. http://192.168.1.50"
+      },
       "required": true,
-      "default": 48.8566,
-      "min": -90,
-      "max": 90
+      "default": "",
+      "description": {
+        "en": "A port or a path is allowed (http://192.168.1.50:5000, https://example.org/octoprint).",
+        "fr": "Un port ou un chemin est accepté (http://192.168.1.50:5000, https://example.org/octoprint).",
+        "de": "Ein Port oder ein Pfad ist möglich (http://192.168.1.50:5000, https://example.org/octoprint).",
+        "es": "Se admite un puerto o una ruta (http://192.168.1.50:5000, https://example.org/octoprint)."
+      }
     },
     {
-      "key": "longitude",
-      "type": "number",
-      "label": { "en": "Longitude", "fr": "Longitude" },
-      "description": {
-        "en": "Longitude used for the demo weather sensor.",
-        "fr": "Longitude utilisée par le capteur météo de démonstration."
+      "key": "link_1",
+      "type": "account_link",
+      "label": {
+        "en": "Connect with OctoPrint",
+        "fr": "Connecter à OctoPrint",
+        "de": "Mit OctoPrint verbinden",
+        "es": "Conectar con OctoPrint"
       },
-      "placeholder": { "en": "e.g. 2.3522", "fr": "ex. 2.3522" },
-      "required": true,
-      "default": 2.3522,
-      "min": -180,
-      "max": 180
+      "description": {
+        "en": "Opens the approval page of OctoPrint: log in there and allow Gladys Assistant. The key is then saved below.",
+        "fr": "Ouvre la page d'autorisation d'OctoPrint : connectez-vous et autorisez Gladys Assistant. La clé est ensuite enregistrée ci-dessous.",
+        "de": "Öffnet die Bestätigungsseite von OctoPrint: Melde dich dort an und erlaube Gladys Assistant. Der Schlüssel wird dann unten gespeichert.",
+        "es": "Abre la página de autorización de OctoPrint: inicie sesión y autorice a Gladys Assistant. La clave se guarda a continuación."
+      }
     },
     {
-      "key": "unit",
+      "key": "api_key_1",
+      "type": "secret",
+      "label": {
+        "en": "API key",
+        "fr": "Clé d'API",
+        "de": "API-Schlüssel",
+        "es": "Clave de API"
+      },
+      "description": {
+        "en": "Filled in by Connect, or pasted from OctoPrint.",
+        "fr": "Remplie par Connecter, ou collée depuis OctoPrint.",
+        "de": "Wird durch Verbinden ausgefüllt oder aus OctoPrint eingefügt.",
+        "es": "Se rellena con Conectar, o se pega desde OctoPrint."
+      },
+      "required": false
+    },
+    {
+      "key": "section_2",
+      "type": "section",
+      "label": {
+        "en": "Printer 2 (optional)",
+        "fr": "Imprimante 2 (facultatif)",
+        "de": "Drucker 2 (optional)",
+        "es": "Impresora 2 (opcional)"
+      },
+      "description": {
+        "en": "Another OctoPrint instance, connected the same way.",
+        "fr": "Une autre instance OctoPrint, connectée de la même façon.",
+        "de": "Eine weitere OctoPrint-Instanz, genauso verbunden.",
+        "es": "Otra instancia de OctoPrint, conectada de la misma forma."
+      }
+    },
+    {
+      "key": "url_2",
+      "type": "string",
+      "label": {
+        "en": "OctoPrint address 2",
+        "fr": "Adresse d'OctoPrint 2",
+        "de": "OctoPrint-Adresse 2",
+        "es": "Dirección de OctoPrint 2"
+      },
+      "placeholder": {
+        "en": "e.g. http://192.168.1.50",
+        "fr": "ex. http://192.168.1.50",
+        "de": "z. B. http://192.168.1.50",
+        "es": "p. ej. http://192.168.1.50"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "link_2",
+      "type": "account_link",
+      "label": {
+        "en": "Connect with OctoPrint 2",
+        "fr": "Connecter à OctoPrint 2",
+        "de": "Mit OctoPrint verbinden 2",
+        "es": "Conectar con OctoPrint 2"
+      },
+      "description": {
+        "en": "Opens the approval page of OctoPrint: log in there and allow Gladys Assistant. The key is then saved below.",
+        "fr": "Ouvre la page d'autorisation d'OctoPrint : connectez-vous et autorisez Gladys Assistant. La clé est ensuite enregistrée ci-dessous.",
+        "de": "Öffnet die Bestätigungsseite von OctoPrint: Melde dich dort an und erlaube Gladys Assistant. Der Schlüssel wird dann unten gespeichert.",
+        "es": "Abre la página de autorización de OctoPrint: inicie sesión y autorice a Gladys Assistant. La clave se guarda a continuación."
+      }
+    },
+    {
+      "key": "api_key_2",
+      "type": "secret",
+      "label": {
+        "en": "API key 2",
+        "fr": "Clé d'API 2",
+        "de": "API-Schlüssel 2",
+        "es": "Clave de API 2"
+      },
+      "description": {
+        "en": "Filled in by Connect, or pasted from OctoPrint.",
+        "fr": "Remplie par Connecter, ou collée depuis OctoPrint.",
+        "de": "Wird durch Verbinden ausgefüllt oder aus OctoPrint eingefügt.",
+        "es": "Se rellena con Conectar, o se pega desde OctoPrint."
+      },
+      "required": false
+    },
+    {
+      "key": "section_3",
+      "type": "section",
+      "label": {
+        "en": "Printer 3 (optional)",
+        "fr": "Imprimante 3 (facultatif)",
+        "de": "Drucker 3 (optional)",
+        "es": "Impresora 3 (opcional)"
+      },
+      "description": {
+        "en": "Another OctoPrint instance, connected the same way.",
+        "fr": "Une autre instance OctoPrint, connectée de la même façon.",
+        "de": "Eine weitere OctoPrint-Instanz, genauso verbunden.",
+        "es": "Otra instancia de OctoPrint, conectada de la misma forma."
+      }
+    },
+    {
+      "key": "url_3",
+      "type": "string",
+      "label": {
+        "en": "OctoPrint address 3",
+        "fr": "Adresse d'OctoPrint 3",
+        "de": "OctoPrint-Adresse 3",
+        "es": "Dirección de OctoPrint 3"
+      },
+      "placeholder": {
+        "en": "e.g. http://192.168.1.50",
+        "fr": "ex. http://192.168.1.50",
+        "de": "z. B. http://192.168.1.50",
+        "es": "p. ej. http://192.168.1.50"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "link_3",
+      "type": "account_link",
+      "label": {
+        "en": "Connect with OctoPrint 3",
+        "fr": "Connecter à OctoPrint 3",
+        "de": "Mit OctoPrint verbinden 3",
+        "es": "Conectar con OctoPrint 3"
+      },
+      "description": {
+        "en": "Opens the approval page of OctoPrint: log in there and allow Gladys Assistant. The key is then saved below.",
+        "fr": "Ouvre la page d'autorisation d'OctoPrint : connectez-vous et autorisez Gladys Assistant. La clé est ensuite enregistrée ci-dessous.",
+        "de": "Öffnet die Bestätigungsseite von OctoPrint: Melde dich dort an und erlaube Gladys Assistant. Der Schlüssel wird dann unten gespeichert.",
+        "es": "Abre la página de autorización de OctoPrint: inicie sesión y autorice a Gladys Assistant. La clave se guarda a continuación."
+      }
+    },
+    {
+      "key": "api_key_3",
+      "type": "secret",
+      "label": {
+        "en": "API key 3",
+        "fr": "Clé d'API 3",
+        "de": "API-Schlüssel 3",
+        "es": "Clave de API 3"
+      },
+      "description": {
+        "en": "Filled in by Connect, or pasted from OctoPrint.",
+        "fr": "Remplie par Connecter, ou collée depuis OctoPrint.",
+        "de": "Wird durch Verbinden ausgefüllt oder aus OctoPrint eingefügt.",
+        "es": "Se rellena con Conectar, o se pega desde OctoPrint."
+      },
+      "required": false
+    },
+    {
+      "key": "section_options",
+      "type": "section",
+      "label": {
+        "en": "Options",
+        "fr": "Options",
+        "de": "Optionen",
+        "es": "Opciones"
+      },
+      "description": {
+        "en": "Language of the names and texts the integration creates (feature names are set when a device is added).",
+        "fr": "Langue des noms et textes créés par l'intégration (les noms des fonctionnalités sont fixés à l'ajout de l'appareil).",
+        "de": "Sprache der Namen und Texte, die die Integration erzeugt (Funktionsnamen werden beim Hinzufügen des Geräts festgelegt).",
+        "es": "Idioma de los nombres y textos que crea la integración (los nombres de las funciones se fijan al añadir el dispositivo)."
+      }
+    },
+    {
+      "key": "language",
       "type": "select",
-      "label": { "en": "Temperature unit", "fr": "Unité de température" },
-      "required": false,
-      "default": "celsius",
-      "options": [
-        { "value": "celsius", "label": { "en": "Celsius", "fr": "Celsius" } },
-        { "value": "fahrenheit", "label": { "en": "Fahrenheit", "fr": "Fahrenheit" } }
-      ]
-    },
-    {
-      "key": "poll_frequency",
-      "type": "number",
-      "label": { "en": "Refresh interval (s)", "fr": "Intervalle de rafraîchissement (s)" },
-      "description": {
-        "en": "How often sensors are polled, in seconds (one minute minimum).",
-        "fr": "Fréquence d'interrogation des capteurs, en secondes (une minute minimum)."
+      "label": {
+        "en": "Language",
+        "fr": "Langue",
+        "de": "Sprache",
+        "es": "Idioma"
       },
       "required": false,
-      "default": 300,
-      "min": 60,
-      "max": 3600
+      "default": "fr",
+      "options": [
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "Anglais",
+            "de": "Englisch",
+            "es": "Inglés"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "French",
+            "fr": "Français",
+            "de": "Französisch",
+            "es": "Francés"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "German",
+            "fr": "Allemand",
+            "de": "Deutsch",
+            "es": "Alemán"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Spanish",
+            "fr": "Espagnol",
+            "de": "Spanisch",
+            "es": "Español"
+          }
+        }
+      ]
     }
   ],
   "actions": [
     {
-      "key": "test_weather",
-      "label": { "en": "Test the weather provider", "fr": "Tester le fournisseur météo" },
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
       "timeout_seconds": 30
-    },
-    {
-      "key": "identify",
-      "label": { "en": "Identify a device", "fr": "Identifier un appareil" },
-      "fields": [
-        {
-          "key": "device",
-          "type": "select",
-          "source": "devices",
-          "label": { "en": "Device", "fr": "Appareil" },
-          "required": true
-        }
-      ]
     }
   ],
   "scene_triggers": [
     {
-      "key": "motion_detected",
-      "label": { "en": "Motion detected", "fr": "Mouvement détecté" },
+      "key": "print_started",
+      "label": {
+        "en": "Print started",
+        "fr": "Impression démarrée",
+        "de": "Druck gestartet",
+        "es": "Impresión iniciada"
+      },
       "description": {
-        "en": "A demo motion sensor saw a person or an animal move.",
-        "fr": "Un détecteur de démonstration a vu bouger une personne ou un animal."
+        "en": "A print job started on OctoPrint.",
+        "fr": "Une impression a démarré sur OctoPrint.",
+        "de": "Ein Druckauftrag wurde in OctoPrint gestartet.",
+        "es": "Se ha iniciado una impresión en OctoPrint."
       },
       "fields": [
         {
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Sensor", "fr": "Détecteur" }
+          "label": {
+            "en": "Printer",
+            "fr": "Imprimante",
+            "de": "Drucker",
+            "es": "Impresora"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "printer",
+          "type": "string",
+          "label": {
+            "en": "Printer name",
+            "fr": "Nom de l'imprimante",
+            "de": "Druckername",
+            "es": "Nombre de la impresora"
+          }
         },
         {
-          "key": "target",
+          "key": "file",
+          "type": "string",
+          "label": {
+            "en": "File",
+            "fr": "Fichier",
+            "de": "Datei",
+            "es": "Archivo"
+          }
+        }
+      ]
+    },
+    {
+      "key": "print_done",
+      "label": {
+        "en": "Print finished",
+        "fr": "Impression terminée",
+        "de": "Druck fertig",
+        "es": "Impresión terminada"
+      },
+      "description": {
+        "en": "A print job finished successfully.",
+        "fr": "Une impression s'est terminée avec succès.",
+        "de": "Ein Druckauftrag wurde erfolgreich beendet.",
+        "es": "Una impresión ha terminado correctamente."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Printer",
+            "fr": "Imprimante",
+            "de": "Drucker",
+            "es": "Impresora"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "printer",
+          "type": "string",
+          "label": {
+            "en": "Printer name",
+            "fr": "Nom de l'imprimante",
+            "de": "Druckername",
+            "es": "Nombre de la impresora"
+          }
+        },
+        {
+          "key": "file",
+          "type": "string",
+          "label": {
+            "en": "File",
+            "fr": "Fichier",
+            "de": "Datei",
+            "es": "Archivo"
+          }
+        },
+        {
+          "key": "duration",
+          "type": "string",
+          "label": {
+            "en": "Print time",
+            "fr": "Durée d'impression",
+            "de": "Druckdauer",
+            "es": "Tiempo de impresión"
+          }
+        },
+        {
+          "key": "duration_minutes",
+          "type": "number",
+          "label": {
+            "en": "Print time (minutes)",
+            "fr": "Durée d'impression (minutes)",
+            "de": "Druckdauer (Minuten)",
+            "es": "Tiempo de impresión (minutos)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "print_failed",
+      "label": {
+        "en": "Print failed or cancelled",
+        "fr": "Impression échouée ou annulée",
+        "de": "Druck fehlgeschlagen oder abgebrochen",
+        "es": "Impresión fallida o cancelada"
+      },
+      "description": {
+        "en": "A print job stopped before its end: cancelled, or an error of the printer.",
+        "fr": "Une impression s'est arrêtée avant la fin : annulée, ou erreur de l'imprimante.",
+        "de": "Ein Druckauftrag endete vorzeitig: abgebrochen oder Druckerfehler.",
+        "es": "Una impresión se ha detenido antes de terminar: cancelada o error de la impresora."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Printer",
+            "fr": "Imprimante",
+            "de": "Drucker",
+            "es": "Impresora"
+          }
+        },
+        {
+          "key": "reason",
           "type": "multi_select",
-          "label": { "en": "What moved", "fr": "Ce qui a bougé" },
+          "label": {
+            "en": "Reason",
+            "fr": "Raison",
+            "de": "Grund",
+            "es": "Motivo"
+          },
           "options": [
-            { "value": "person", "label": { "en": "Person", "fr": "Personne" } },
-            { "value": "animal", "label": { "en": "Animal", "fr": "Animal" } }
+            {
+              "value": "cancelled",
+              "label": {
+                "en": "Cancelled",
+                "fr": "Annulée",
+                "de": "Abgebrochen",
+                "es": "Cancelada"
+              }
+            },
+            {
+              "value": "error",
+              "label": {
+                "en": "Error",
+                "fr": "Erreur",
+                "de": "Fehler",
+                "es": "Error"
+              }
+            }
           ]
         }
       ],
       "variables": [
         {
-          "key": "target",
+          "key": "printer",
           "type": "string",
-          "label": { "en": "What moved", "fr": "Ce qui a bougé" }
+          "label": {
+            "en": "Printer name",
+            "fr": "Nom de l'imprimante",
+            "de": "Druckername",
+            "es": "Nombre de la impresora"
+          }
+        },
+        {
+          "key": "file",
+          "type": "string",
+          "label": {
+            "en": "File",
+            "fr": "Fichier",
+            "de": "Datei",
+            "es": "Archivo"
+          }
+        },
+        {
+          "key": "duration",
+          "type": "string",
+          "label": {
+            "en": "Print time",
+            "fr": "Durée d'impression",
+            "de": "Druckdauer",
+            "es": "Tiempo de impresión"
+          }
+        },
+        {
+          "key": "duration_minutes",
+          "type": "number",
+          "label": {
+            "en": "Print time (minutes)",
+            "fr": "Durée d'impression (minutes)",
+            "de": "Druckdauer (Minuten)",
+            "es": "Tiempo de impresión (minutos)"
+          }
+        },
+        {
+          "key": "reason",
+          "type": "string",
+          "label": {
+            "en": "Reason (cancelled or error)",
+            "fr": "Raison (cancelled ou error)",
+            "de": "Grund (cancelled oder error)",
+            "es": "Motivo (cancelled o error)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "print_paused",
+      "label": {
+        "en": "Print paused",
+        "fr": "Impression en pause",
+        "de": "Druck pausiert",
+        "es": "Impresión en pausa"
+      },
+      "description": {
+        "en": "A print job was paused (by a user, or by the printer, e.g. filament runout).",
+        "fr": "Une impression a été mise en pause (par un utilisateur, ou par l'imprimante, ex. fin de filament).",
+        "de": "Ein Druckauftrag wurde pausiert (von jemandem oder vom Drucker, z. B. Filamentende).",
+        "es": "Una impresión se ha pausado (por un usuario o por la impresora, p. ej. fin del filamento)."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Printer",
+            "fr": "Imprimante",
+            "de": "Drucker",
+            "es": "Impresora"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "printer",
+          "type": "string",
+          "label": {
+            "en": "Printer name",
+            "fr": "Nom de l'imprimante",
+            "de": "Druckername",
+            "es": "Nombre de la impresora"
+          }
+        },
+        {
+          "key": "file",
+          "type": "string",
+          "label": {
+            "en": "File",
+            "fr": "Fichier",
+            "de": "Datei",
+            "es": "Archivo"
+          }
+        },
+        {
+          "key": "duration",
+          "type": "string",
+          "label": {
+            "en": "Elapsed time",
+            "fr": "Temps écoulé",
+            "de": "Verstrichene Zeit",
+            "es": "Tiempo transcurrido"
+          }
+        },
+        {
+          "key": "duration_minutes",
+          "type": "number",
+          "label": {
+            "en": "Elapsed time (minutes)",
+            "fr": "Temps écoulé (minutes)",
+            "de": "Verstrichene Zeit (Minuten)",
+            "es": "Tiempo transcurrido (minutos)"
+          }
         }
       ]
     }
   ],
   "scene_actions": [
     {
-      "key": "identify_device",
-      "label": { "en": "Identify a device", "fr": "Identifier un appareil" },
-      "description": {
-        "en": "Make a device signal itself (the demo light blinks).",
-        "fr": "Fait se signaler un appareil (la lampe de démonstration clignote)."
+      "key": "control_print",
+      "label": {
+        "en": "Pause, resume or cancel a print",
+        "fr": "Mettre en pause, reprendre ou annuler une impression",
+        "de": "Druck pausieren, fortsetzen oder abbrechen",
+        "es": "Pausar, reanudar o cancelar una impresión"
       },
-      "timeout_seconds": 15,
+      "description": {
+        "en": "Applied: false when there is nothing to pause, resume or cancel.",
+        "fr": "Appliqué : faux quand il n'y a rien à mettre en pause, reprendre ou annuler.",
+        "de": "Ausgeführt: falsch, wenn nichts zu pausieren, fortzusetzen oder abzubrechen ist.",
+        "es": "Aplicado: falso cuando no hay nada que pausar, reanudar o cancelar."
+      },
+      "timeout_seconds": 20,
       "fields": [
         {
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Device", "fr": "Appareil" },
+          "label": {
+            "en": "Printer",
+            "fr": "Imprimante",
+            "de": "Drucker",
+            "es": "Impresora"
+          },
+          "required": true
+        },
+        {
+          "key": "command",
+          "type": "select",
+          "label": {
+            "en": "Command",
+            "fr": "Commande",
+            "de": "Befehl",
+            "es": "Comando"
+          },
+          "required": true,
+          "default": "pause",
+          "options": [
+            {
+              "value": "pause",
+              "label": {
+                "en": "Pause",
+                "fr": "Mettre en pause",
+                "de": "Pausieren",
+                "es": "Pausar"
+              }
+            },
+            {
+              "value": "resume",
+              "label": {
+                "en": "Resume",
+                "fr": "Reprendre",
+                "de": "Fortsetzen",
+                "es": "Reanudar"
+              }
+            },
+            {
+              "value": "cancel",
+              "label": {
+                "en": "Cancel",
+                "fr": "Annuler",
+                "de": "Abbrechen",
+                "es": "Cancelar"
+              }
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "key": "applied",
+          "type": "boolean",
+          "label": {
+            "en": "Applied",
+            "fr": "Appliqué",
+            "de": "Ausgeführt",
+            "es": "Aplicado"
+          }
+        }
+      ]
+    },
+    {
+      "key": "preheat",
+      "label": {
+        "en": "Preheat the printer",
+        "fr": "Préchauffer l'imprimante",
+        "de": "Drucker vorheizen",
+        "es": "Precalentar la impresora"
+      },
+      "description": {
+        "en": "Sets the nozzle (every nozzle) and bed targets. Refused during a print (applied: false).",
+        "fr": "Règle les consignes de la buse (toutes les buses) et du plateau. Refusé pendant une impression (appliqué : faux).",
+        "de": "Setzt die Solltemperaturen der Düse (aller Düsen) und des Druckbetts. Während eines Drucks abgelehnt (ausgeführt: falsch).",
+        "es": "Fija las consignas de la boquilla (todas) y de la cama. Se rechaza durante una impresión (aplicado: falso)."
+      },
+      "timeout_seconds": 20,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Printer",
+            "fr": "Imprimante",
+            "de": "Drucker",
+            "es": "Impresora"
+          },
+          "required": true
+        },
+        {
+          "key": "tool_temperature",
+          "type": "number",
+          "label": {
+            "en": "Nozzle (°C)",
+            "fr": "Buse (°C)",
+            "de": "Düse (°C)",
+            "es": "Boquilla (°C)"
+          },
+          "required": true,
+          "default": 200,
+          "min": 0,
+          "max": 350
+        },
+        {
+          "key": "bed_temperature",
+          "type": "number",
+          "label": {
+            "en": "Bed (°C)",
+            "fr": "Plateau (°C)",
+            "de": "Druckbett (°C)",
+            "es": "Cama (°C)"
+          },
+          "required": true,
+          "default": 60,
+          "min": 0,
+          "max": 150
+        }
+      ],
+      "outputs": [
+        {
+          "key": "applied",
+          "type": "boolean",
+          "label": {
+            "en": "Applied",
+            "fr": "Appliqué",
+            "de": "Ausgeführt",
+            "es": "Aplicado"
+          }
+        }
+      ]
+    },
+    {
+      "key": "cool_down",
+      "label": {
+        "en": "Turn the heaters off",
+        "fr": "Couper les chauffes",
+        "de": "Heizungen ausschalten",
+        "es": "Apagar los calentadores"
+      },
+      "description": {
+        "en": "Sets every target (nozzles, bed, chamber) to 0. Also during a print: the print would fail.",
+        "fr": "Met toutes les consignes (buses, plateau, caisson) à 0. Aussi pendant une impression, qui échouerait alors.",
+        "de": "Setzt alle Solltemperaturen (Düsen, Druckbett, Bauraum) auf 0. Auch während eines Drucks, der dann misslingt.",
+        "es": "Pone todas las consignas (boquillas, cama, recinto) a 0. También durante una impresión, que fallaría."
+      },
+      "timeout_seconds": 20,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Printer",
+            "fr": "Imprimante",
+            "de": "Drucker",
+            "es": "Impresora"
+          },
           "required": true
         }
       ],
       "outputs": [
         {
-          "key": "signalled",
+          "key": "applied",
           "type": "boolean",
-          "label": { "en": "Device signalled", "fr": "Appareil signalé" }
+          "label": {
+            "en": "Applied",
+            "fr": "Appliqué",
+            "de": "Ausgeführt",
+            "es": "Aplicado"
+          }
         }
       ]
     }
   ],
   "widgets": [
     {
-      "key": "demo_status",
-      "label": { "en": "Demo status", "fr": "État de la démo" },
-      "description": {
-        "en": "Live temperature and plug power, plug connection and observed location.",
-        "fr": "Température et puissance en direct, connexion de la prise, position observée."
+      "key": "printer",
+      "label": {
+        "en": "3D print",
+        "fr": "Impression 3D",
+        "de": "3D-Druck",
+        "es": "Impresión 3D"
       },
-      "icon": "activity",
-      "action_timeout_seconds": 15
+      "description": {
+        "en": "Progress, time left, temperatures, and pause, resume or preheat buttons.",
+        "fr": "Progression, temps restant, températures, et boutons pause, reprise ou préchauffage.",
+        "de": "Fortschritt, Restzeit, Temperaturen und Tasten zum Pausieren, Fortsetzen oder Vorheizen.",
+        "es": "Progreso, tiempo restante, temperaturas y botones de pausa, reanudación o precalentamiento."
+      },
+      "icon": "printer",
+      "action_timeout_seconds": 20,
+      "settings": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Printer",
+            "fr": "Imprimante",
+            "de": "Drucker",
+            "es": "Impresora"
+          },
+          "required": true
+        },
+        {
+          "key": "preheat_tool",
+          "type": "number",
+          "label": {
+            "en": "Preheat: nozzle (°C)",
+            "fr": "Préchauffage : buse (°C)",
+            "de": "Vorheizen: Düse (°C)",
+            "es": "Precalentar: boquilla (°C)"
+          },
+          "required": false,
+          "default": 200,
+          "min": 0,
+          "max": 350
+        },
+        {
+          "key": "preheat_bed",
+          "type": "number",
+          "label": {
+            "en": "Preheat: bed (°C)",
+            "fr": "Préchauffage : plateau (°C)",
+            "de": "Vorheizen: Druckbett (°C)",
+            "es": "Precalentar: cama (°C)"
+          },
+          "required": false,
+          "default": 60,
+          "min": 0,
+          "max": 150
+        }
+      ]
     }
   ]
 }

@@ -1,93 +1,97 @@
+// Scene actions: what reaches OctoPrint, and when a command is refused.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { createFakeGladys } from '@gladysassistant/integration-sdk/testing';
-import { DEVICE_BLUEPRINTS } from '../src/devices/index.js';
-import { MOTION_DETECTED_TRIGGER, motionSensor } from '../src/devices/motionSensor.js';
-import { SCENE_ACTIONS } from '../src/scenes.js';
-import { normalizeConfig } from '../src/config.js';
+import { API_KEY, createOctoPrint, fixture, settle } from './helpers/fakeOctoPrint.js';
+import { createWorld, deviceId } from './helpers/world.js';
 
-const manifest = JSON.parse(
-  await readFile(new URL('../gladys-assistant-integration.json', import.meta.url), 'utf8'),
-);
-const config = normalizeConfig();
+const run = (world, key, fields) => world.gladys.fake.sceneAction(key, fields);
 
-const declarationOf = (list, key) => manifest[list].find((entry) => entry.key === key);
-const keysOf = (list) => (list ?? []).map((entry) => entry.key);
-const deviceIdOf = (gladys, key) =>
-  DEVICE_BLUEPRINTS.find((bp) => bp.key === key).deviceExternalId(gladys);
-
-// Let the async interval callback run to completion.
-const flush = () => new Promise((resolve) => setImmediate(resolve));
-
-test('the motion sensor fires one motion_detected event per detection, none on the clear', async (t) => {
-  t.mock.timers.enable({ apis: ['setInterval', 'setTimeout'] });
-  const gladys = createFakeGladys();
-  const stopPush = motionSensor.startPush(gladys, config);
-  try {
-    t.mock.timers.tick(60_000);
-    await flush();
-    assert.equal(gladys.fake.sceneEvents.length, 1, 'one detection, one event');
-    assert.equal(gladys.fake.sceneEvents[0].key, MOTION_DETECTED_TRIGGER);
-    assert.equal(gladys.fake.states.at(-1).state, 1, 'the state is still published');
-
-    t.mock.timers.tick(10_000);
-    await flush();
-    assert.equal(gladys.fake.states.at(-1).state, 0, 'the detection is cleared');
-    assert.equal(gladys.fake.sceneEvents.length, 1, 'the clear fires no event');
-  } finally {
-    stopPush();
-  }
+test('control_print: applied when there is something to pause, resume or cancel', async (t) => {
+  const world = await createWorld();
+  t.after(() => world.app.stop());
+  const [server] = world.servers;
+  const device = deviceId(1);
+  assert.deepEqual((await run(world, 'control_print', { device, command: 'pause' })).data, {
+    outputs: { applied: false },
+  });
+  server.setState('printing');
+  await settle();
+  assert.deepEqual((await run(world, 'control_print', { device, command: 'pause' })).data.outputs, {
+    applied: true,
+  });
+  server.setState('paused');
+  await settle();
+  await run(world, 'control_print', { device, command: 'resume' });
+  assert.deepEqual(server.commands.at(-1).body, { command: 'pause', action: 'resume' });
+  await run(world, 'control_print', { device, command: 'cancel' });
+  assert.deepEqual(server.commands.at(-1).body, { command: 'cancel' });
+  const bad = await run(world, 'control_print', { device, command: 'explode' });
+  assert.equal(bad.success, false);
 });
 
-test('motion_detected data only carries keys the trigger declares', async (t) => {
-  t.mock.timers.enable({ apis: ['setInterval', 'setTimeout'] });
-  const gladys = createFakeGladys();
-  const stopPush = motionSensor.startPush(gladys, config);
-  try {
-    t.mock.timers.tick(60_000);
-    await flush();
-  } finally {
-    stopPush();
-  }
-  const [{ data }] = gladys.fake.sceneEvents;
-  const trigger = declarationOf('scene_triggers', MOTION_DETECTED_TRIGGER);
-  // The core keeps the `fields` keys (filters) and the `variables` keys
-  // (exposed to the scene): any other key would be silently dropped.
-  const declared = [...keysOf(trigger.fields), ...keysOf(trigger.variables)];
-  for (const [key, value] of Object.entries(data)) {
-    assert.ok(declared.includes(key), `data.${key} is not declared, the core would drop it`);
-    assert.ok(value === null || typeof value !== 'object', `data.${key} must be a primitive`);
-  }
-  // A `"source": "devices"` filter stores a device external_id.
-  assert.equal(data.device, deviceIdOf(gladys, 'motion-sensor'));
-  const targets = trigger.fields.find((field) => field.key === 'target').options;
-  assert.ok(
-    targets.some((option) => option.value === data.target),
-    `data.target "${data.target}" must be one of the filter options`,
+test('an unknown printer or an unreachable OctoPrint fails the action', async (t) => {
+  const world = await createWorld();
+  t.after(() => world.app.stop());
+  const unknown = await run(world, 'control_print', { device: deviceId(3), command: 'pause' });
+  assert.equal(unknown.success, false);
+  assert.match(unknown.error, /plus configurée/);
+  world.servers[0].down = true;
+  world.servers[0].dropSockets();
+  await new Promise((resolve) => setTimeout(resolve, 150));
+  const down = await run(world, 'cool_down', { device: deviceId(1) });
+  assert.equal(down.success, false);
+  assert.match(down.error, /ne répond pas/);
+});
+
+test('preheat sets every nozzle and the bed, and is refused during a print', async (t) => {
+  const server = createOctoPrint({ profiles: fixture('printerprofiles-dual-chamber.json') });
+  const world = await createWorld({ octoprints: [server] });
+  t.after(() => world.app.stop());
+  const device = deviceId(1);
+  const ack = await run(world, 'preheat', {
+    device,
+    tool_temperature: 215,
+    bed_temperature: '65,4',
+  });
+  assert.deepEqual(ack.data.outputs, { applied: true });
+  assert.deepEqual(
+    server.commands.map((c) => [c.path, c.body]),
+    [
+      ['/api/printer/tool', { command: 'target', targets: { tool0: 215, tool1: 215 } }],
+      ['/api/printer/bed', { command: 'target', target: 65 }],
+    ],
   );
+  // Defaults (PLA) when a field is empty.
+  await run(world, 'preheat', { device });
+  assert.deepEqual(server.commands.at(-2).body.targets, { tool0: 200, tool1: 200 });
+  const tooHot = await run(world, 'preheat', { device, tool_temperature: 500 });
+  assert.equal(tooHot.success, false);
+  server.setState('printing');
+  await settle();
+  const count = server.commands.length;
+  assert.deepEqual((await run(world, 'preheat', { device })).data.outputs, { applied: false });
+  assert.equal(server.commands.length, count, 'temperatures untouched during a print');
 });
 
-test('identify_device signals the chosen device and returns the declared outputs', async () => {
-  const gladys = createFakeGladys();
-  const outputs = await SCENE_ACTIONS.identify_device(gladys, {
-    fields: { device: deviceIdOf(gladys, 'light') },
-    config,
+test('cool_down turns every heater off, chamber included, even during a print', async (t) => {
+  const server = createOctoPrint({
+    profiles: fixture('printerprofiles-dual-chamber.json'),
+    state: 'printing',
   });
-  assert.deepEqual(outputs, { signalled: true });
-  const declared = keysOf(declarationOf('scene_actions', 'identify_device').outputs);
-  for (const key of Object.keys(outputs)) {
-    assert.ok(declared.includes(key), `output "${key}" is not declared, the core would drop it`);
-  }
-});
-
-test('identify_device reports a device that cannot signal itself through its output', async () => {
-  // Not a failure: a scene action is never a condition, the scene author
-  // gates the following actions on the output instead.
-  const gladys = createFakeGladys();
-  const outputs = await SCENE_ACTIONS.identify_device(gladys, {
-    fields: { device: deviceIdOf(gladys, 'weather-station') },
-    config,
+  const world = await createWorld({
+    octoprints: [server],
+    config: { url_1: server.url, api_key_1: API_KEY },
   });
-  assert.deepEqual(outputs, { signalled: false });
+  t.after(() => world.app.stop());
+  const ack = await run(world, 'cool_down', { device: deviceId(1) });
+  assert.deepEqual(ack.data.outputs, { applied: true });
+  assert.deepEqual(
+    server.commands.map((c) => c.body),
+    [
+      { command: 'target', targets: { tool0: 0, tool1: 0 } },
+      { command: 'target', target: 0 },
+      { command: 'target', target: 0 },
+    ],
+  );
+  assert.equal(server.commands.at(-1).path, '/api/printer/chamber');
 });
