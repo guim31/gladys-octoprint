@@ -1,0 +1,25 @@
+{
+  "job": {
+    "averagePrintTime": null,
+    "estimatedPrintTime": null,
+    "filament": null,
+    "file": {
+      "date": 1791832262,
+      "display": "short.gcode",
+      "name": "short.gcode",
+      "origin": "local",
+      "path": "short.gcode",
+      "size": 155
+    },
+    "lastPrintTime": null,
+    "user": "admin"
+  },
+  "progress": {
+    "completion": 45.806451612903224,
+    "filepos": 71,
+    "printTime": 2,
+    "printTimeLeft": 3,
+    "printTimeLeftOrigin": "linear"
+  },
+  "state": "Printing"
+}

@@ -16,8 +16,8 @@ its only runtime dependency. It started from the official JavaScript template.
 ```bash
 npm install
 npm test                                  # node --test, the built-in runner
-node --test test/devices.test.js          # one file
-node --test --test-name-pattern "plug"    # tests whose name matches
+node --test test/hub.test.js              # one file
+node --test --test-name-pattern "widget"  # tests whose name matches
 npm run lint                              # ESLint
 npm run format:check                      # Prettier, as the CI runs it
 npm run format                            # Prettier, fix in place
@@ -31,16 +31,24 @@ pushing.
 ## Architecture
 
 ```
-index.js                          SDK wiring only: handlers registered before connect()
-src/devices/index.js              registry of the device blueprints + dispatch helpers
-src/devices/<type>.js             one device type per file (buildDevice, onPoll, onSetValue...)
+index.js                          SDK wiring only: src/app.js registers the handlers before connect()
+src/app.js                        every SDK handler -> the hub (also used by the tests)
+src/hub.js                        printers, devices, states, connection status, scene events, Connect flow
+src/printer.js                    one OctoPrint instance: push link, REST fallback, print events, commands
+src/devices.js                    OctoPrint -> Gladys device, snapshot -> feature states
+src/octoprint/client.js           REST client (X-Api-Key header, error kinds, no redirect)
+src/octoprint/socket.js           push socket /sockjs/websocket: auth, throttle, reconnection, idle watchdog
+src/octoprint/appkeys.js          Application Keys workflow (request, wait for the decision)
+src/octoprint/model.js            reading REST and push answers into snapshots, capabilities
 src/scenes.js                     scene action handlers (manifest `scene_actions`)
 src/widgets.js                    dashboard widget handlers (manifest `widgets`)
+src/texts.js                      every text produced by the container, in four languages
 src/config.js                     DEFAULT_CONFIG (mirrors the manifest defaults) + normalization
-src/weather.js                    example driver (Open-Meteo)
+src/store.js                      /data/octoprint-state.json (capabilities of each printer)
 gladys-assistant-integration.json manifest: name, config_schema, actions, image...
-docs/en.md, docs/fr.md            user documentation, re-hosted by Gladys (mandatory)
+docs/{en,fr,de,es}.md             user documentation, re-hosted by Gladys (en and fr mandatory)
 test/                             node --test, against the SDK's fake Gladys (integration-sdk/testing)
+                                  and helpers/fakeOctoPrint.js (recorded OctoPrint answers)
 .github/scripts/release.mjs       release helpers (manifest bump, changelog), tested in test/
 ```
 
@@ -70,8 +78,9 @@ test/                             node --test, against the SDK's fake Gladys (in
   `type: "provider"`: 5.1.0). `test/manifest.test.js` ties the manifest to the
   code (defaults, action, scene and widget handlers): change both sides
   together.
-- **User-facing text** is bilingual (English and French): action messages,
-  manifest texts, and `docs/en.md` / `docs/fr.md`, kept in sync.
+- **User-facing text** exists in English, French, German and Spanish: action
+  messages, manifest texts, feature names, widget contents, and
+  `docs/{en,fr,de,es}.md`, kept in sync (`test/i18n.test.js`).
 - **Style.** Prettier formats, ESLint catches mistakes. Comments explain why,
   in English. Tests never touch the network.
 
@@ -211,3 +220,45 @@ long, et sur un « Sie »/« Ihr… » de politesse en allemand. Le store exige 
 - Fichier `LICENSE` Apache-2.0 (texte complet) à la racine.
 - `transports` : `local` seul quand le cloud n'est qu'une option annexe.
 - Docs `en`, `fr`, `de`, `es` avec les mêmes sections.
+
+## OctoPrint (appris sur cette intégration)
+
+Faits vérifiés sur OctoPrint 1.11.8 (image `octoprint/octoprint`, imprimante virtuelle), réponses
+enregistrées dans `test/fixtures/octoprint/` :
+
+- **Clé d'API** : en-tête `X-Api-Key`, jamais dans l'URL. Sans clé, même `/api/version` répond
+  403 (les permissions anonymes sont vides par défaut). `/api/settings` contient la clé globale
+  d'OctoPrint (`api.key`) : ne jamais le journaliser ni l'enregistrer en fixture brute.
+- **Application Keys** : `POST /plugin/appkeys/request {app}` → 201 `{app_token, auth_dialog}`
+  (sans clé ; `auth_dialog` depuis 1.10, construit sur l'adresse utilisée par l'intégration). Le
+  sondage `GET /plugin/appkeys/request/<token>` doit avoir lieu **au moins toutes les 5 s**, sinon
+  la demande expire ; 202 en attente, 200 `{api_key}` **une seule fois**, 404 refusé/expiré.
+  Limite : 3 demandes par minute (429). Côté Gladys, c'est un champ `account_link` (présent depuis
+  5.1.0) : `onOAuthAuthorizeUrl(key)` renvoie la page d'autorisation, la clé obtenue est écrite par
+  `setConfig({ api_key_<n> })` dans le champ `secret` (validé par le cœur, pas d'écho
+  `config-updated`, donc mettre à jour la config en mémoire soi-même).
+- **Imprimante déconnectée** : `/api/printer` répond **409** ; `/api/job` répond toujours, avec
+  `state: "Offline"`. Une chambre absente du profil : `POST /api/printer/chamber` → 409.
+- **Fin de travail** : après une impression terminée, `/api/job` garde `completion: 100` et la
+  durée ; après une annulation, tout repasse à `null`. L'annulation émet `PrintCancelling`,
+  `PrintCancelled`, puis `PrintFailed` avec `reason: "cancelled"` : ne réagir qu'à `PrintFailed`
+  pour ne pas doubler le déclencheur. `PrintPaused` n'a pas de `time`.
+- **Flux push** : `/sockjs/websocket` (WebSocket brut, un objet JSON par trame), authentifié par
+  `{auth: "name:session"}` après `POST /api/login {passive: true}` avec la clé. `{throttle: N}`
+  espace les `current` (N × 500 ms) ; les événements ne sont pas limités. Les `current` arrivent
+  même au repos : un silence de 60 s veut dire lien mort. Le tableau `temps` peut être vide, et une
+  chambre absente y figure avec `actual: null`.
+- **Webcam** : `GET /downloads/camera/current` (1.9+) renvoie la capture via OctoPrint, avec la
+  clé ; l'adresse de la webcam (souvent `127.0.0.1` sur le Pi) n'a pas à être joignable. Le cœur
+  refuse une image de plus de 150 Ko (URI comprise) : pas de redimensionnement sans dépendance
+  lourde, on signale l'erreur.
+- **Pièges Gladys rencontrés** : aucun couple « pourcentage » générique en lecture seule n'a de
+  libellé dans le front ; la progression utilise `level-sensor/liquid-level-percent` (précédent de
+  gladys-ipp). `duration/decimal` est rendu comme un curseur (commande) : `duration/integer` pour
+  les durées. Le front affiche le **nom de l'appareil** à la place du nom publié pour une
+  fonctionnalité seule de son **type** (comparaison sur le type seul) : `state` et `file` sont deux
+  `text/text`, d'où leurs noms affichés. `button/push` s'affiche avec un bouton « Pousser » : pas
+  de confirmation possible, donc pas d'annulation en bouton d'appareil.
+- Déclencheurs : ils reflètent un changement réel de l'imprimante, quelle qu'en soit l'origine (une
+  pause demandée par le widget déclenche aussi `print_paused`). Aucune boucle possible : aucune
+  action de l'intégration ne réagit à ses propres déclencheurs.

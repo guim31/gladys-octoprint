@@ -1,0 +1,44 @@
+{
+  "sd": {
+    "ready": true
+  },
+  "state": {
+    "error": "",
+    "flags": {
+      "cancelling": false,
+      "closedOrError": false,
+      "error": false,
+      "finishing": false,
+      "operational": true,
+      "paused": false,
+      "pausing": false,
+      "printing": false,
+      "ready": true,
+      "resuming": false,
+      "sdReady": true
+    },
+    "text": "Operational"
+  },
+  "temperature": {
+    "bed": {
+      "actual": 21.3,
+      "offset": 0,
+      "target": 0
+    },
+    "chamber": {
+      "actual": 34.75,
+      "offset": 0,
+      "target": 35
+    },
+    "tool0": {
+      "actual": 41.27,
+      "offset": 0,
+      "target": 200
+    },
+    "tool1": {
+      "actual": 41.15,
+      "offset": 0,
+      "target": 180
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "profiles": {
+    "_default": {
+      "axes": {
+        "e": {
+          "inverted": false,
+          "speed": 300
+        },
+        "x": {
+          "inverted": false,
+          "speed": 6000
+        },
+        "y": {
+          "inverted": false,
+          "speed": 6000
+        },
+        "z": {
+          "inverted": false,
+          "speed": 200
+        }
+      },
+      "color": "default",
+      "current": false,
+      "default": false,
+      "extruder": {
+        "count": 1,
+        "defaultExtrusionLength": 5,
+        "nozzleDiameter": 0.4,
+        "offsets": [[0, 0]],
+        "sharedNozzle": false
+      },
+      "heatedBed": true,
+      "heatedChamber": false,
+      "id": "_default",
+      "model": "Generic RepRap Printer",
+      "name": "Default",
+      "resource": "http://192.0.2.10/api/printerprofiles/_default",
+      "volume": {
+        "custom_box": false,
+        "depth": 200,
+        "formFactor": "rectangular",
+        "height": 200,
+        "origin": "lowerleft",
+        "width": 200
+      }
+    },
+    "dual": {
+      "axes": {
+        "e": {
+          "inverted": false,
+          "speed": 300
+        },
+        "x": {
+          "inverted": false,
+          "speed": 6000
+        },
+        "y": {
+          "inverted": false,
+          "speed": 6000
+        },
+        "z": {
+          "inverted": false,
+          "speed": 200
+        }
+      },
+      "color": "default",
+      "current": true,
+      "default": true,
+      "extruder": {
+        "count": 2,
+        "defaultExtrusionLength": 5,
+        "nozzleDiameter": 0.4,
+        "offsets": [
+          [0, 0],
+          [20, 0]
+        ],
+        "sharedNozzle": false
+      },
+      "heatedBed": true,
+      "heatedChamber": true,
+      "id": "dual",
+      "model": "IDEX test",
+      "name": "Dual IDEX",
+      "resource": "http://192.0.2.10/api/printerprofiles/dual",
+      "volume": {
+        "custom_box": false,
+        "depth": 200,
+        "formFactor": "rectangular",
+        "height": 200,
+        "origin": "lowerleft",
+        "width": 200
+      }
+    }
+  }
+}

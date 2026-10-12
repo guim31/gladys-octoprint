@@ -1,0 +1,2478 @@
+[
+  {
+    "t": 22,
+    "message": {
+      "connected": {
+        "version": "1.11.8",
+        "display_version": "1.11.8",
+        "branch": "bugfix",
+        "safe_mode": null,
+        "online": true
+      }
+    }
+  },
+  {
+    "t": 23,
+    "message": {
+      "history": {
+        "state": {
+          "text": "Operational",
+          "flags": {
+            "operational": true,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": true,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": null,
+            "path": null,
+            "size": null,
+            "origin": null,
+            "date": null
+          },
+          "estimatedPrintTime": null,
+          "lastPrintTime": null,
+          "filament": {
+            "length": null,
+            "volume": null
+          },
+          "user": null
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": null,
+          "filepos": null,
+          "printTime": null,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": null
+        },
+        "temps": [
+          {
+            "time": 1791832227,
+            "tool0": {
+              "actual": 21.3,
+              "target": 0
+            },
+            "bed": {
+              "actual": 21.3,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832229,
+            "tool0": {
+              "actual": 21.3,
+              "target": 0
+            },
+            "bed": {
+              "actual": 21.3,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832231,
+            "tool0": {
+              "actual": 21.3,
+              "target": 0
+            },
+            "bed": {
+              "actual": 21.3,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ],
+        "serverTime": 1791832232.14543
+      }
+    }
+  },
+  {
+    "t": 24,
+    "message": {
+      "timelapse": null
+    }
+  },
+  {
+    "t": 382,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Operational",
+          "flags": {
+            "operational": true,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": true,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": null,
+            "path": null,
+            "size": null,
+            "origin": null,
+            "date": null
+          },
+          "estimatedPrintTime": null,
+          "lastPrintTime": null,
+          "filament": {
+            "length": null,
+            "volume": null
+          },
+          "user": null
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": null,
+          "filepos": null,
+          "printTime": null,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": null
+        },
+        "serverTime": 1791832232.509771,
+        "temps": []
+      }
+    }
+  },
+  {
+    "t": 1566,
+    "message": {
+      "event": {
+        "type": "FileSelected",
+        "payload": {
+          "name": "benchy-mini.gcode",
+          "path": "benchy-mini.gcode",
+          "origin": "local",
+          "size": null,
+          "owner": "admin",
+          "user": "admin"
+        }
+      }
+    }
+  },
+  {
+    "t": 1583,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "STARTING",
+          "state_string": "Starting"
+        }
+      }
+    }
+  },
+  {
+    "t": 1589,
+    "message": {
+      "event": {
+        "type": "PrintStarted",
+        "payload": {
+          "name": "benchy-mini.gcode",
+          "path": "benchy-mini.gcode",
+          "origin": "local",
+          "size": 1959,
+          "owner": "admin",
+          "user": "admin"
+        }
+      }
+    }
+  },
+  {
+    "t": 1598,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "PRINTING",
+          "state_string": "Printing"
+        }
+      }
+    }
+  },
+  {
+    "t": 2383,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 2.6544155181214903,
+          "filepos": 52,
+          "printTime": 0,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832234.5106356,
+        "temps": [
+          {
+            "time": 1791832233,
+            "tool0": {
+              "actual": 21.3,
+              "target": 0
+            },
+            "bed": {
+              "actual": 21.3,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832233,
+            "tool0": {
+              "actual": 21.3,
+              "target": 210
+            },
+            "bed": {
+              "actual": 21.3,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832233,
+            "tool0": {
+              "actual": 21.3,
+              "target": 210
+            },
+            "bed": {
+              "actual": 21.3,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832233,
+            "tool0": {
+              "actual": 21.3,
+              "target": 210
+            },
+            "bed": {
+              "actual": 21.36,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832233,
+            "tool0": {
+              "actual": 21.33,
+              "target": 210
+            },
+            "bed": {
+              "actual": 21.36,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 4384,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 2.6544155181214903,
+          "filepos": 52,
+          "printTime": 0,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832236.511408,
+        "temps": [
+          {
+            "time": 1791832234,
+            "tool0": {
+              "actual": 21.33,
+              "target": 210
+            },
+            "bed": {
+              "actual": 31.36,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832235,
+            "tool0": {
+              "actual": 21.33,
+              "target": 210
+            },
+            "bed": {
+              "actual": 41.38,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832235,
+            "tool0": {
+              "actual": 41.34,
+              "target": 210
+            },
+            "bed": {
+              "actual": 41.38,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 6388,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 2.6544155181214903,
+          "filepos": 52,
+          "printTime": 0,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832238.5126042,
+        "temps": [
+          {
+            "time": 1791832236,
+            "tool0": {
+              "actual": 41.34,
+              "target": 210
+            },
+            "bed": {
+              "actual": 51.39,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832237,
+            "tool0": {
+              "actual": 41.34,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832237,
+            "tool0": {
+              "actual": 61.37,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 8386,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 3.164880040837162,
+          "filepos": 62,
+          "printTime": 5,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832240.5133333,
+        "temps": [
+          {
+            "time": 1791832238,
+            "tool0": {
+              "actual": 61.37,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832238,
+            "tool0": {
+              "actual": 71.4,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832239,
+            "tool0": {
+              "actual": 81.41,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832239,
+            "tool0": {
+              "actual": 81.41,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 10387,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 3.164880040837162,
+          "filepos": 62,
+          "printTime": 5,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832242.5142715,
+        "temps": [
+          {
+            "time": 1791832240,
+            "tool0": {
+              "actual": 91.42,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832241,
+            "tool0": {
+              "actual": 101.44,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832241,
+            "tool0": {
+              "actual": 101.44,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 12389,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 3.164880040837162,
+          "filepos": 62,
+          "printTime": 5,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832244.514757,
+        "temps": [
+          {
+            "time": 1791832242,
+            "tool0": {
+              "actual": 111.44,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832243,
+            "tool0": {
+              "actual": 121.45,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832243,
+            "tool0": {
+              "actual": 121.45,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 14386,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 3.164880040837162,
+          "filepos": 62,
+          "printTime": 5,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832246.5153186,
+        "temps": [
+          {
+            "time": 1791832244,
+            "tool0": {
+              "actual": 131.46,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832245,
+            "tool0": {
+              "actual": 141.47,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832245,
+            "tool0": {
+              "actual": 141.47,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 16390,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 3.164880040837162,
+          "filepos": 62,
+          "printTime": 5,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832248.515958,
+        "temps": [
+          {
+            "time": 1791832246,
+            "tool0": {
+              "actual": 151.48,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832247,
+            "tool0": {
+              "actual": 161.49,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832247,
+            "tool0": {
+              "actual": 161.49,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 16710,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "PAUSING",
+          "state_string": "Pausing"
+        }
+      }
+    }
+  },
+  {
+    "t": 18388,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Pausing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": true,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": 66.38892742497171,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": {
+            "tool0": {
+              "length": 5.9,
+              "volume": 0
+            }
+          },
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 3.164880040837162,
+          "filepos": 62,
+          "printTime": 5,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832250.5164635,
+        "temps": [
+          {
+            "time": 1791832248,
+            "tool0": {
+              "actual": 171.5,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832249,
+            "tool0": {
+              "actual": 181.51,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832249,
+            "tool0": {
+              "actual": 181.51,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 20390,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Pausing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": true,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": 66.38892742497171,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": {
+            "tool0": {
+              "length": 5.9,
+              "volume": 0
+            }
+          },
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 3.164880040837162,
+          "filepos": 62,
+          "printTime": 5,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832252.5172749,
+        "temps": [
+          {
+            "time": 1791832250,
+            "tool0": {
+              "actual": 191.52,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832251,
+            "tool0": {
+              "actual": 201.53,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832251,
+            "tool0": {
+              "actual": 201.53,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 22390,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Pausing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": true,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": 66.38892742497171,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": {
+            "tool0": {
+              "length": 5.9,
+              "volume": 0
+            }
+          },
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 3.164880040837162,
+          "filepos": 62,
+          "printTime": 5,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832254.5181909,
+        "temps": [
+          {
+            "time": 1791832252,
+            "tool0": {
+              "actual": 210,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832253,
+            "tool0": {
+              "actual": 210,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 22631,
+    "message": {
+      "event": {
+        "type": "PrintPaused",
+        "payload": {
+          "name": "benchy-mini.gcode",
+          "path": "benchy-mini.gcode",
+          "origin": "local",
+          "size": 1959,
+          "position": {
+            "t": 0,
+            "e": 0,
+            "f": null,
+            "z": 0,
+            "x": 0,
+            "y": 0
+          },
+          "fileposition": 62,
+          "progress": 3,
+          "owner": "admin",
+          "user": "admin"
+        }
+      }
+    }
+  },
+  {
+    "t": 22633,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "PAUSED",
+          "state_string": "Paused"
+        }
+      }
+    }
+  },
+  {
+    "t": 24389,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Paused",
+          "flags": {
+            "operational": true,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": true,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": 66.38892742497171,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": {
+            "tool0": {
+              "length": 5.9,
+              "volume": 0
+            }
+          },
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": 3.164880040837162,
+          "filepos": 62,
+          "printTime": 5,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832256.518649,
+        "temps": [
+          {
+            "time": 1791832255,
+            "tool0": {
+              "actual": 210,
+              "target": 210
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832256,
+            "tool0": {
+              "actual": 210,
+              "target": 215
+            },
+            "bed": {
+              "actual": 60,
+              "target": 60
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832256,
+            "tool0": {
+              "actual": 210,
+              "target": 215
+            },
+            "bed": {
+              "actual": 60,
+              "target": 65
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 26129,
+    "message": {
+      "event": {
+        "type": "PrintCancelling",
+        "payload": {
+          "name": "benchy-mini.gcode",
+          "path": "benchy-mini.gcode",
+          "origin": "local",
+          "size": 1959,
+          "owner": "admin",
+          "user": "admin"
+        }
+      }
+    }
+  },
+  {
+    "t": 26131,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "CANCELLING",
+          "state_string": "Cancelling"
+        }
+      }
+    }
+  },
+  {
+    "t": 26133,
+    "message": {
+      "event": {
+        "type": "PrintCancelled",
+        "payload": {
+          "name": "benchy-mini.gcode",
+          "path": "benchy-mini.gcode",
+          "origin": "local",
+          "size": 1959,
+          "position": {
+            "t": null,
+            "e": null,
+            "f": null,
+            "z": null,
+            "x": null,
+            "y": null
+          },
+          "fileposition": 62,
+          "progress": 3,
+          "owner": "admin",
+          "user": "admin",
+          "time": 24.569291252992116
+        }
+      }
+    }
+  },
+  {
+    "t": 26152,
+    "message": {
+      "event": {
+        "type": "PrintFailed",
+        "payload": {
+          "name": "benchy-mini.gcode",
+          "path": "benchy-mini.gcode",
+          "origin": "local",
+          "size": 1959,
+          "position": {
+            "t": null,
+            "e": null,
+            "f": null,
+            "z": null,
+            "x": null,
+            "y": null
+          },
+          "fileposition": 62,
+          "progress": 3,
+          "owner": "admin",
+          "user": "admin",
+          "time": 24.569291252992116,
+          "reason": "cancelled"
+        }
+      }
+    }
+  },
+  {
+    "t": 26152,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "OPERATIONAL",
+          "state_string": "Operational"
+        }
+      }
+    }
+  },
+  {
+    "t": 26391,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Operational",
+          "flags": {
+            "operational": true,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": true,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": 66.38892742497171,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": {
+            "tool0": {
+              "length": 5.9,
+              "volume": 0
+            }
+          },
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": null,
+          "filepos": null,
+          "printTime": null,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": null
+        },
+        "serverTime": 1791832258.5203078,
+        "temps": [
+          {
+            "time": 1791832258,
+            "tool0": {
+              "actual": 214.87,
+              "target": 215
+            },
+            "bed": {
+              "actual": 64.89,
+              "target": 65
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832258,
+            "tool0": {
+              "actual": 214.87,
+              "target": 0
+            },
+            "bed": {
+              "actual": 64.89,
+              "target": 65
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          },
+          {
+            "time": 1791832258,
+            "tool0": {
+              "actual": 214.87,
+              "target": 0
+            },
+            "bed": {
+              "actual": 64.89,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 28391,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Operational",
+          "flags": {
+            "operational": true,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": true,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": 66.38892742497171,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": {
+            "tool0": {
+              "length": 5.9,
+              "volume": 0
+            }
+          },
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": null,
+          "filepos": null,
+          "printTime": null,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": null
+        },
+        "serverTime": 1791832260.5206118,
+        "temps": [
+          {
+            "time": 1791832260,
+            "tool0": {
+              "actual": 211.45,
+              "target": 0
+            },
+            "bed": {
+              "actual": 61.47,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 30394,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Operational",
+          "flags": {
+            "operational": true,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": true,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "benchy-mini.gcode",
+            "path": "benchy-mini.gcode",
+            "display": "benchy-mini.gcode",
+            "origin": "local",
+            "size": 1959,
+            "date": 1791832233
+          },
+          "estimatedPrintTime": 66.38892742497171,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": {
+            "tool0": {
+              "length": 5.9,
+              "volume": 0
+            }
+          },
+          "user": "admin"
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": null,
+          "filepos": null,
+          "printTime": null,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": null
+        },
+        "serverTime": 1791832262.5231645,
+        "temps": [
+          {
+            "time": 1791832262,
+            "tool0": {
+              "actual": 207.45,
+              "target": 0
+            },
+            "bed": {
+              "actual": 57.47,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 30438,
+    "message": {
+      "event": {
+        "type": "FileSelected",
+        "payload": {
+          "name": "short.gcode",
+          "path": "short.gcode",
+          "origin": "local",
+          "size": null,
+          "owner": "admin",
+          "user": "admin"
+        }
+      }
+    }
+  },
+  {
+    "t": 30444,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "STARTING",
+          "state_string": "Starting"
+        }
+      }
+    }
+  },
+  {
+    "t": 30446,
+    "message": {
+      "event": {
+        "type": "PrintStarted",
+        "payload": {
+          "name": "short.gcode",
+          "path": "short.gcode",
+          "origin": "local",
+          "size": 155,
+          "owner": "admin",
+          "user": "admin"
+        }
+      }
+    }
+  },
+  {
+    "t": 30449,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "PRINTING",
+          "state_string": "Printing"
+        }
+      }
+    }
+  },
+  {
+    "t": 32395,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "short.gcode",
+            "path": "short.gcode",
+            "display": "short.gcode",
+            "origin": "local",
+            "size": 155,
+            "date": 1791832262
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": 5,
+        "progress": {
+          "completion": 35.483870967741936,
+          "filepos": 55,
+          "printTime": 1,
+          "printTimeLeft": 3,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832264.5236115,
+        "temps": [
+          {
+            "time": 1791832264,
+            "tool0": {
+              "actual": 204.28,
+              "target": 0
+            },
+            "bed": {
+              "actual": 54.3,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 34394,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "short.gcode",
+            "path": "short.gcode",
+            "display": "short.gcode",
+            "origin": "local",
+            "size": 155,
+            "date": 1791832262
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": 5,
+        "progress": {
+          "completion": 56.12903225806451,
+          "filepos": 87,
+          "printTime": 3,
+          "printTimeLeft": 3,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832266.5239248,
+        "temps": [
+          {
+            "time": 1791832266,
+            "tool0": {
+              "actual": 200.26,
+              "target": 0
+            },
+            "bed": {
+              "actual": 50.29,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 36396,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "short.gcode",
+            "path": "short.gcode",
+            "display": "short.gcode",
+            "origin": "local",
+            "size": 155,
+            "date": 1791832262
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": 5,
+        "progress": {
+          "completion": 76.77419354838709,
+          "filepos": 119,
+          "printTime": 5,
+          "printTimeLeft": 1,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832268.5243723,
+        "temps": [
+          {
+            "time": 1791832268,
+            "tool0": {
+              "actual": 196.24,
+              "target": 0
+            },
+            "bed": {
+              "actual": 46.27,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 38395,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Printing",
+          "flags": {
+            "operational": true,
+            "printing": true,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "short.gcode",
+            "path": "short.gcode",
+            "display": "short.gcode",
+            "origin": "local",
+            "size": 155,
+            "date": 1791832262
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": 5,
+        "progress": {
+          "completion": 97.41935483870968,
+          "filepos": 151,
+          "printTime": 7,
+          "printTimeLeft": 0,
+          "printTimeLeftOrigin": "linear"
+        },
+        "serverTime": 1791832270.5246468,
+        "temps": [
+          {
+            "time": 1791832270,
+            "tool0": {
+              "actual": 192.22,
+              "target": 0
+            },
+            "bed": {
+              "actual": 42.25,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 38489,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "FINISHING",
+          "state_string": "Finishing"
+        }
+      }
+    }
+  },
+  {
+    "t": 38494,
+    "message": {
+      "event": {
+        "type": "PrintDone",
+        "payload": {
+          "name": "short.gcode",
+          "path": "short.gcode",
+          "origin": "local",
+          "size": 155,
+          "owner": "admin",
+          "time": 8.048839556984603
+        }
+      }
+    }
+  },
+  {
+    "t": 38503,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "OPERATIONAL",
+          "state_string": "Operational"
+        }
+      }
+    }
+  },
+  {
+    "t": 40396,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Operational",
+          "flags": {
+            "operational": true,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": true,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": "short.gcode",
+            "path": "short.gcode",
+            "display": "short.gcode",
+            "origin": "local",
+            "size": 155,
+            "date": 1791832262
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": 8.048839556984603,
+          "lastPrintTime": 8.048839556984603,
+          "filament": null,
+          "user": "admin"
+        },
+        "currentZ": 5,
+        "progress": {
+          "completion": 100,
+          "filepos": 155,
+          "printTime": 8,
+          "printTimeLeft": 0,
+          "printTimeLeftOrigin": null
+        },
+        "serverTime": 1791832272.5250764,
+        "temps": [
+          {
+            "time": 1791832272,
+            "tool0": {
+              "actual": 187.44,
+              "target": 0
+            },
+            "bed": {
+              "actual": 37.46,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 41019,
+    "message": {
+      "event": {
+        "type": "Disconnecting",
+        "payload": null
+      }
+    }
+  },
+  {
+    "t": 41021,
+    "message": {
+      "event": {
+        "type": "FileDeselected",
+        "payload": null
+      }
+    }
+  },
+  {
+    "t": 41022,
+    "message": {
+      "event": {
+        "type": "Disconnected",
+        "payload": null
+      }
+    }
+  },
+  {
+    "t": 41024,
+    "message": {
+      "plugin": {
+        "plugin": "action_command_notification",
+        "data": {}
+      }
+    }
+  },
+  {
+    "t": 41025,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "OFFLINE",
+          "state_string": "Offline"
+        }
+      }
+    }
+  },
+  {
+    "t": 42398,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Offline",
+          "flags": {
+            "operational": false,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": true,
+            "error": false,
+            "paused": false,
+            "ready": false,
+            "sdReady": false
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": null,
+            "path": null,
+            "display": null,
+            "origin": null,
+            "size": null,
+            "date": null
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": null
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": null,
+          "filepos": null,
+          "printTime": null,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": null
+        },
+        "serverTime": 1791832274.5256832,
+        "temps": [
+          {
+            "time": 1791832273
+          }
+        ]
+      }
+    }
+  },
+  {
+    "t": 43054,
+    "message": {
+      "event": {
+        "type": "Connecting",
+        "payload": null
+      }
+    }
+  },
+  {
+    "t": 43072,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "DETECT_SERIAL",
+          "state_string": "Detecting serial connection"
+        }
+      }
+    }
+  },
+  {
+    "t": 43083,
+    "message": {
+      "event": {
+        "type": "PrinterStateChanged",
+        "payload": {
+          "state_id": "OPERATIONAL",
+          "state_string": "Operational"
+        }
+      }
+    }
+  },
+  {
+    "t": 43084,
+    "message": {
+      "event": {
+        "type": "Connected",
+        "payload": {
+          "port": "VIRTUAL",
+          "baudrate": 0
+        }
+      }
+    }
+  },
+  {
+    "t": 44397,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Operational",
+          "flags": {
+            "operational": true,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": true,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": null,
+            "path": null,
+            "display": null,
+            "origin": null,
+            "size": null,
+            "date": null
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": null
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": null,
+          "filepos": null,
+          "printTime": null,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": null
+        },
+        "serverTime": 1791832276.5260017,
+        "temps": []
+      }
+    }
+  },
+  {
+    "t": 46398,
+    "message": {
+      "current": {
+        "state": {
+          "text": "Operational",
+          "flags": {
+            "operational": true,
+            "printing": false,
+            "cancelling": false,
+            "pausing": false,
+            "resuming": false,
+            "finishing": false,
+            "closedOrError": false,
+            "error": false,
+            "paused": false,
+            "ready": true,
+            "sdReady": true
+          },
+          "error": ""
+        },
+        "job": {
+          "file": {
+            "name": null,
+            "path": null,
+            "display": null,
+            "origin": null,
+            "size": null,
+            "date": null
+          },
+          "estimatedPrintTime": null,
+          "averagePrintTime": null,
+          "lastPrintTime": null,
+          "filament": null,
+          "user": null
+        },
+        "currentZ": null,
+        "progress": {
+          "completion": null,
+          "filepos": null,
+          "printTime": null,
+          "printTimeLeft": null,
+          "printTimeLeftOrigin": null
+        },
+        "serverTime": 1791832278.526667,
+        "temps": [
+          {
+            "time": 1791832277,
+            "tool0": {
+              "actual": 21.3,
+              "target": 0
+            },
+            "bed": {
+              "actual": 21.3,
+              "target": 0
+            },
+            "chamber": {
+              "actual": null,
+              "target": null
+            }
+          }
+        ]
+      }
+    }
+  }
+]

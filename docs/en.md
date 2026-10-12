@@ -1,61 +1,159 @@
-# Demo Devices Template
+# OctoPrint
 
-This is the user documentation of the integration. Gladys re-hosts this file
-and shows a permanent **Documentation** link to it in the Configuration screen
-(in the user's language, with English as the fallback) — it is when
-configuring that the user needs it most. Keep the short onboarding hints in
-the `section` blocks of the manifest `config_schema`; put the long
-step-by-step (screenshots, troubleshooting…) here.
+Follow and control your 3D printer from Gladys through
+[OctoPrint](https://octoprint.org), the open-source web interface for 3D
+printers (often installed on a Raspberry Pi with OctoPi). Everything stays on
+your local network: Gladys talks to OctoPrint directly, no cloud account.
 
-## What you get
+The integration was tested against a real OctoPrint (1.11.8) driving its
+built-in virtual printer: real prints, pause, resume, cancellation, end of
+print. It has not been tried on a physical printer yet: feedback welcome on
+the Gladys forum.
 
-Six demo devices show up after installation: a weather station (real data
-from Open-Meteo), a switch, a dimmable light, a smart plug with power
-metering, a motion sensor and a camera.
+## Requirements
+
+- Gladys Assistant 5.1 or later.
+- OctoPrint 1.5 or later, reachable from the Gladys machine. The approval
+  page of the Connect button needs OctoPrint 1.10 or later; with an older
+  version, the request pops up in the OctoPrint interface instead.
+- An OctoPrint user allowed to control the printer (the user who approves the
+  request: its permissions are those of the key).
+- For the webcam image: OctoPrint 1.9 or later, with a webcam able to take
+  snapshots (the default on OctoPi).
 
 ## Configuration
 
 1. Open the **Configuration** tab of the integration.
-2. Set the **latitude** and **longitude** the demo weather station should
-   observe (they default to Paris), and pick your temperature unit.
-   The **refresh interval** sets how often the weather station and the
-   plug's power are read: every 5 minutes by default, every minute at most.
-3. Save: the devices appear in the **Discovery** tab, ready to be added.
+2. In **OctoPrint address**, enter the address you open OctoPrint with in your
+   browser, for instance `http://192.168.1.50`. A port or a path is allowed
+   (`http://192.168.1.50:5000`, `https://example.org/octoprint`). Prefer an IP
+   address: `octopi.local` names do not resolve inside the integration
+   container. Save.
+3. Click **Connect with OctoPrint**. The approval page of OctoPrint opens:
+   log in if asked, then allow **Gladys Assistant**. The integration receives
+   its key by itself and saves it in **API key** (the field stays masked). The
+   status of the Configuration screen turns to connected.
+4. Without the Connect button, create a key in OctoPrint (**Settings →
+   Application Keys**, or your user's API key) and paste it in **API key**,
+   then save.
+5. A second or third printer: fill **Printer 2** and **Printer 3** the same
+   way (one OctoPrint instance each).
+6. **Language** sets the language of the feature names and texts the
+   integration creates (French by default). Feature names are set when the
+   device is added to Gladys.
 
-The **Prefer the local connection** toggle drives the demo plug: it reports
-the channel it actually uses as a badge (local or cloud), with an orange dot
-when it runs degraded (local refused, cloud fallback).
+Then add the printer from the **Discover** tab.
 
-## Actions
+## The printer device
 
-- **Test the weather provider** — performs a live request to Open-Meteo and
-  shows the current temperature and humidity under the button.
-- **Identify a device** — pick one of your devices in the list and it will
-  signal itself (the demo light "blinks" in the logs).
+One device per OctoPrint instance, named after the instance name of OctoPrint
+(**Settings → Appearance**), or "OctoPrint". The values arrive in real time
+through the push connection of OctoPrint (every 5 seconds, events at once).
 
-## Scenes
+| Feature              | What it shows                                                                                                                                |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| State                | Operational, Printing, Pausing, Paused, Resuming, Cancelling, Finishing, Error, Printer disconnected, OctoPrint unreachable, API key refused |
+| File                 | The file being printed, or the last one                                                                                                      |
+| Progress             | Percentage of the print (kept at 100 % after a finished print, 0 after a cancellation)                                                       |
+| Elapsed time         | In minutes                                                                                                                                   |
+| Time left            | Estimated by OctoPrint, in minutes (0 when idle)                                                                                             |
+| Nozzle, Bed, Chamber | Temperatures, in whole degrees; one nozzle per extruder, the chamber only when the printer profile declares a heated chamber                 |
+| … (target)           | Setpoints: change them from the dashboard (nozzle 0 to 350 °C, bed 0 to 150 °C, chamber 0 to 100 °C)                                         |
+| Pause, Resume        | Push buttons                                                                                                                                 |
+| Webcam               | The webcam image, through OctoPrint (when a webcam with snapshots is configured)                                                             |
 
-The integration adds its own cards to the scene editor (Gladys 5.1 or
-later), under the **Integrations** category:
+There is deliberately no **cancel** button on the device: one tap without
+confirmation would ruin a print. Cancelling is offered by the widget (with a
+confirmation) and by the scenes.
 
-- **Motion detected** (trigger) — starts the scene when a demo motion sensor
-  sees something move. Optionally pick the sensor and what moved (person,
-  animal); left empty, any detection matches. The following actions can
-  read what moved with `{{triggerEvent.data.target}}`.
-- **Identify a device** (action) — makes the chosen device signal itself.
-  It returns whether the device could signal itself, so the following
-  actions can depend on it.
+What the printer has (nozzles, heated bed and chamber, webcam) comes from the
+current printer profile of OctoPrint. When it changes, Gladys offers to update
+the device in the **Discover** tab.
 
-## Dashboard
+## Dashboard widget
 
-Add the **Demo status** widget to a dashboard: it shows the live
-temperature of the weather station and the power of the office plug, the
-connection the plug currently uses (orange when degraded) and the observed
-location. Its **Identify the light** button makes the demo light signal
-itself.
+Add the **3D print** widget to a dashboard and pick the printer in its
+settings. It shows:
+
+- the progress gauge, the time left, the nozzle and bed temperatures (live);
+- the state, the file, the elapsed time, the time the print should end, the
+  active setpoints;
+- the buttons that fit the moment: **Pause** or **Resume** and **Cancel**
+  (asks for confirmation) during a print; **Preheat** and, when something
+  heats, **Cool down** when idle.
+
+The preheat temperatures are settings of the widget (200 °C and 60 °C by
+default, PLA).
+
+## Scene triggers
+
+Under the **Integrations** category of the scene editor. Each can be limited
+to one printer.
+
+- **Print started** — variables: printer name, file.
+- **Print finished** — variables: printer name, file, print time (text, like
+  `1 h 05 min`, and in minutes).
+- **Print failed or cancelled** — can be limited to a reason (cancelled,
+  error). Variables: printer name, file, print time, reason.
+- **Print paused** — by a user or by the printer itself (filament runout).
+  Variables: printer name, file, elapsed time.
+
+The variables are read in the following actions with, for instance,
+`{{triggerEvent.data.file}}` and `{{triggerEvent.data.duration}}`.
+
+## Scene actions
+
+- **Pause, resume or cancel a print** — returns **Applied**: false when there
+  was nothing to pause, resume or cancel (the scene goes on).
+- **Preheat the printer** — nozzle (every nozzle) and bed setpoints, 200 °C
+  and 60 °C by default. Refused during a print (Applied: false): a scene
+  preheating at a fixed time never touches a running print.
+- **Turn the heaters off** — every setpoint to 0, also during a print (which
+  then fails).
+
+## Scene examples
+
+- **Print finished → notification**: trigger Print finished, action "Send a
+  message": `{{triggerEvent.data.file}} done in {{triggerEvent.data.duration}}`.
+- **Smoke detected → stop everything**: trigger on the smoke detector, actions
+  Pause, resume or cancel a print (cancel), then Turn the heaters off, then
+  turn the printer's smart plug off.
+- **Ready when you get up**: at 7:00 on weekdays, Preheat the printer (it does
+  nothing if a print runs).
+- **Light for the webcam**: Print started → turn the workshop light on; Print
+  finished or Print failed → turn it off.
 
 ## Troubleshooting
 
-The integration logs everything it does: check the integration logs from the
-Gladys UI (or `docker logs` on the host) with `LOG_LEVEL=debug` for the full
-detail.
+- **OctoPrint does not answer**: check the address from the Gladys machine
+  (`curl http://192.168.1.50/api/version` answers 403 without key: OctoPrint
+  is reachable). Use an IP address rather than `octopi.local`.
+- **API key missing or refused**: click Connect again, or paste a new key. A
+  key revoked in OctoPrint (**Settings → Application Keys**) stops working at
+  once.
+- **Connect does nothing / "denied or expired"**: the request must be approved
+  within 10 minutes, by a user allowed to grant access. OctoPrint accepts 3
+  requests per minute at most: wait a minute before trying again. If the
+  Application Keys plugin is disabled, paste a key instead.
+- **The address redirects** (http to https): enter the final address.
+- **No webcam image**: the image must be a JPEG of 150 KB at most (a Gladys
+  limit): lower the webcam resolution in OctoPrint.
+- **Values are 10 s late**: the push connection is unavailable (a reverse
+  proxy without WebSocket): the integration then reads the API every
+  10 seconds, and derives the print events from the state changes.
+- Logs: in the integration page of Gladys, or `docker logs` on the host.
+  `LOG_LEVEL=debug` shows the detail. The API key never appears in the logs.
+
+## Limits
+
+- Up to three OctoPrint instances.
+- No file upload, no print start from Gladys, no G-code commands, no
+  time-lapse.
+- The webcam image is a snapshot refreshed every minute (and on demand), not
+  a video stream.
+- When the integration cannot use the push connection, an event shorter than
+  10 seconds may be missed, and a print stopped by an error is reported as
+  failed with the reason "error" only when OctoPrint shows the error state.
+- Developed without a physical printer (the OctoPrint virtual printer was
+  used): feedback welcome.
+- Not affiliated with OctoPrint. OctoPrint is a project of Gina Häußge.
