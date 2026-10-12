@@ -6,8 +6,12 @@
 // - progress: level-sensor/liquid-level-percent, the only read-only percent
 //   couple with a label (the precedent of gladys-ipp's supply levels);
 // - elapsed, left: duration/integer in minutes (duration/decimal is a slider);
-// - temperatures: temperature-sensor/decimal;
-// - targets: thermostat/target-temperature, the setpoint row (+/-, typed value);
+// - temperatures and their targets: device-temperature-sensor/decimal, read
+//   only. Not temperature-sensor: Gladys averages those of a room into its
+//   room temperature (and the weekly digest), a 210 °C nozzle would skew it.
+//   Not thermostat: a printer heater must never be settable by mistake from
+//   the dashboard, nor through HomeKit, Alexa or Google (fire risk). Heating
+//   goes through the widget (preheat, cool down) and the scene actions;
 // - pause, resume: button/push, the "Push" row button.
 // Cancelling is not a device button: one tap, no confirmation, a ruined
 // print. It is offered by the widget (with a confirmation) and the scenes.
@@ -112,20 +116,18 @@ export function buildDevice(gladys, { slot, url, capabilities }, language) {
     const max = heaterLimit(heater);
     features.push(
       feature(`${heater}_temperature`, label, {
-        category: CAT.TEMPERATURE_SENSOR,
+        category: CAT.DEVICE_TEMPERATURE_SENSOR,
         type: TYPE.SENSOR.DECIMAL,
         unit: UNIT.CELSIUS,
         min: 0,
         max,
       }),
       feature(`${heater}_target`, `${label} (${names.target})`, {
-        category: CAT.THERMOSTAT,
-        type: TYPE.THERMOSTAT.TARGET_TEMPERATURE,
+        category: CAT.DEVICE_TEMPERATURE_SENSOR,
+        type: TYPE.SENSOR.DECIMAL,
         unit: UNIT.CELSIUS,
         min: 0,
         max,
-        read_only: false,
-        has_feedback: true,
       }),
     );
   }

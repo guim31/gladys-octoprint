@@ -16,7 +16,8 @@ cloud, no account.
 
 - **One device per OctoPrint instance** (up to three): state, file, progress,
   elapsed and remaining time, nozzle / bed / chamber temperatures and their
-  setpoints (adjustable from the dashboard), pause and resume buttons, and the
+  setpoints (read only: heating goes through the widget and the scenes, never
+  the dashboard nor HomeKit, Alexa or Google), pause and resume buttons, and the
   webcam image through OctoPrint. Real time through OctoPrint's push socket,
   with a REST polling fallback.
 - **Connect button**: the OctoPrint Application Keys workflow, through a Gladys

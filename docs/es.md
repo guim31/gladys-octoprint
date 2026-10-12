@@ -61,13 +61,18 @@ instante).
 | Tiempo transcurrido     | En minutos                                                                                                                                                    |
 | Tiempo restante         | Estimado por OctoPrint, en minutos (0 en reposo)                                                                                                              |
 | Boquilla, Cama, Recinto | Temperaturas en grados enteros; una boquilla por extrusor, el recinto solo si el perfil de impresora declara un recinto calefactado                           |
-| … (consigna)            | Consignas: se cambian desde el panel (boquilla 0 a 350 °C, cama 0 a 150 °C, recinto 0 a 100 °C)                                                               |
+| … (consigna)            | Consignas, solo lectura: caliente con el widget o las acciones de escena                                                                                      |
 | Pausar, Reanudar        | Pulsadores                                                                                                                                                    |
 | Webcam                  | La imagen de la webcam, a través de OctoPrint (si hay una webcam con captura configurada)                                                                     |
 
 A propósito, el dispositivo no tiene botón de **cancelar**: una pulsación sin
 confirmación arruinaría una impresión. La cancelación la ofrecen el widget
-(con confirmación) y las escenas.
+(con confirmación) y las escenas. Las temperaturas y consignas también son de
+solo lectura: un calentador de la impresora no puede encenderse por error
+desde el panel, ni con HomeKit, Alexa o Google. Se calienta con el widget
+(precalentar, enfriar) y las acciones de escena. Para Gladys son
+«temperaturas del dispositivo»: nunca cuentan en la temperatura de la
+habitación.
 
 Lo que tiene la impresora (boquillas, cama y recinto calefactados, webcam)
 viene del perfil de impresora activo en OctoPrint. Cuando cambia, Gladys

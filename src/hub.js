@@ -415,19 +415,13 @@ export class Hub {
     return this.command(externalId, 'targets', targets);
   }
 
-  /** onSetValue: a setpoint or a button of the device box. */
-  async setValue(device, feature, value) {
+  /** onSetValue: the pause and resume buttons (everything else is read only). */
+  async setValue(device, feature) {
     const key = featureKeyOf(feature?.external_id);
-    if (key === 'pause' || key === 'resume') {
-      await this.command(device.external_id, key);
-      return;
-    }
-    const match = key.match(/^(tool\d+|bed|chamber)_target$/);
-    if (!match) {
+    if (key !== 'pause' && key !== 'resume') {
       throw new Error(`Feature ${key} cannot be controlled`);
     }
-    const target = checkTemperature(match[1], Number(value), this.language);
-    await this.command(device.external_id, 'targets', { [match[1]]: target });
+    await this.command(device.external_id, key);
   }
 
   /** onPoll (the devices are not polled; this only serves a Gladys that would). */

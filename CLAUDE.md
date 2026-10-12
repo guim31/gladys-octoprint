@@ -259,6 +259,12 @@ enregistrées dans `test/fixtures/octoprint/` :
   fonctionnalité seule de son **type** (comparaison sur le type seul) : `state` et `file` sont deux
   `text/text`, d'où leurs noms affichés. `button/push` s'affiche avec un bouton « Pousser » : pas
   de confirmation possible, donc pas d'annulation en bouton d'appareil.
+- **Températures et consignes en `device-temperature-sensor/decimal`, lecture seule** (décision de
+  l'orchestrateur, 12/10/2026) : `temperature-sensor/decimal` entre dans la moyenne de
+  température de la pièce (`getTemperatureInRoom`) et dans le bilan hebdomadaire (toute la
+  catégorie) ; `thermostat/target-temperature` serait pilotable depuis le tableau de bord et
+  exposé à HomeKit, Alexa ou Google : risque d'incendie. Les chauffes passent uniquement par le
+  widget et les actions de scène (préchauffage refusé pendant une impression).
 - Déclencheurs : ils reflètent un changement réel de l'imprimante, quelle qu'en soit l'origine (une
   pause demandée par le widget déclenche aussi `print_paused`). Aucune boucle possible : aucune
   action de l'intégration ne réagit à ses propres déclencheurs.

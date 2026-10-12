@@ -14,7 +14,8 @@ the notes of the version's GitHub Release.
 
 - One Gladys device per OctoPrint instance, up to three: state, file, progress,
   elapsed and remaining time, nozzle, bed and chamber temperatures with their
-  setpoints (adjustable from the dashboard), pause and resume buttons, and the
+  setpoints (read only, kept out of the room temperature; heating goes
+  through the widget and the scene actions), pause and resume buttons, and the
   webcam image through OctoPrint.
 - Real-time values through the push socket of OctoPrint, with a REST polling
   fallback when it is unavailable.

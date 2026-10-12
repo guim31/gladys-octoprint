@@ -62,13 +62,18 @@ en temps réel par la connexion push d'OctoPrint (toutes les 5 secondes, les
 | Temps écoulé           | En minutes                                                                                                                                                       |
 | Temps restant          | Estimé par OctoPrint, en minutes (0 au repos)                                                                                                                    |
 | Buse, Plateau, Caisson | Températures, en degrés entiers ; une buse par extrudeur, le caisson seulement si le profil d'imprimante déclare un caisson chauffant                            |
-| … (consigne)           | Consignes : modifiables depuis le tableau de bord (buse 0 à 350 °C, plateau 0 à 150 °C, caisson 0 à 100 °C)                                                      |
+| … (consigne)           | Consignes, en lecture seule : chauffer par le widget ou les actions de scène                                                                                     |
 | Pause, Reprise         | Boutons poussoirs                                                                                                                                                |
 | Webcam                 | L'image de la webcam, via OctoPrint (si une webcam avec capture est configurée)                                                                                  |
 
 Il n'y a volontairement pas de bouton **annuler** sur l'appareil : un appui
 sans confirmation ruinerait une impression. L'annulation est proposée par le
-widget (avec confirmation) et par les scènes.
+widget (avec confirmation) et par les scènes. Les températures et consignes
+sont aussi en lecture seule : une chauffe d'imprimante ne peut pas être lancée
+par erreur depuis le tableau de bord, ni par HomeKit, Alexa ou Google. On
+chauffe par le widget (préchauffer, refroidir) et les actions de scène. Ce sont
+des « températures d'appareil » pour Gladys : elles ne comptent jamais dans la
+température de la pièce.
 
 Ce que possède l'imprimante (buses, plateau et caisson chauffants, webcam)
 vient du profil d'imprimante actif dans OctoPrint. Quand il change, Gladys

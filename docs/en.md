@@ -58,13 +58,17 @@ through the push connection of OctoPrint (every 5 seconds, events at once).
 | Elapsed time         | In minutes                                                                                                                                   |
 | Time left            | Estimated by OctoPrint, in minutes (0 when idle)                                                                                             |
 | Nozzle, Bed, Chamber | Temperatures, in whole degrees; one nozzle per extruder, the chamber only when the printer profile declares a heated chamber                 |
-| … (target)           | Setpoints: change them from the dashboard (nozzle 0 to 350 °C, bed 0 to 150 °C, chamber 0 to 100 °C)                                         |
+| … (target)           | Setpoints, read only: heat with the widget or the scene actions                                                                              |
 | Pause, Resume        | Push buttons                                                                                                                                 |
 | Webcam               | The webcam image, through OctoPrint (when a webcam with snapshots is configured)                                                             |
 
 There is deliberately no **cancel** button on the device: one tap without
 confirmation would ruin a print. Cancelling is offered by the widget (with a
-confirmation) and by the scenes.
+confirmation) and by the scenes. The temperatures and setpoints are read only
+too: a printer heater cannot be turned on by mistake from the dashboard, nor
+by HomeKit, Alexa or Google. Heating goes through the widget (preheat, cool
+down) and the scene actions. They are "device temperatures" for Gladys, so
+they never count in the temperature of the room.
 
 What the printer has (nozzles, heated bed and chamber, webcam) comes from the
 current printer profile of OctoPrint. When it changes, Gladys offers to update

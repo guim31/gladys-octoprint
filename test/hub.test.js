@@ -96,7 +96,7 @@ test('print events fire the scene triggers with their variables', async (t) => {
   ]);
 });
 
-test('setpoints and buttons of the device box', async (t) => {
+test('the device box: pause and resume buttons only, temperatures read only', async (t) => {
   const world = await createWorld();
   t.after(() => world.app.stop());
   const fake = world.gladys.fake;
@@ -104,17 +104,16 @@ test('setpoints and buttons of the device box', async (t) => {
   const device = fake.discoveredDevices[0];
   const feature = (key) => device.features.find((f) => f.external_id === featureId(key));
 
-  assert.deepEqual(await fake.setValue(device, feature('tool0_target'), 215.4), { success: true });
-  assert.deepEqual(server.commands.at(-1), {
-    path: '/api/printer/tool',
-    body: { command: 'target', targets: { tool0: 215 } },
-  });
-  await fake.setValue(device, feature('bed_target'), 60);
-  assert.deepEqual(server.commands.at(-1).body, { command: 'target', target: 60 });
-
-  const tooHot = await fake.setValue(device, feature('bed_target'), 400);
-  assert.equal(tooHot.success, false);
-  assert.match(tooHot.error, /0 à 150 °C/);
+  // No heater can be set from the dashboard (nor HomeKit, Alexa, Google).
+  const heaters = device.features.filter((f) => /_(temperature|target)$/.test(f.external_id));
+  assert.ok(heaters.length >= 4);
+  for (const heater of heaters) {
+    assert.equal(heater.read_only, true, heater.external_id);
+    assert.equal(heater.category, 'device-temperature-sensor', 'kept out of the room temperature');
+  }
+  const refused = await fake.setValue(device, feature('tool0_target'), 215);
+  assert.equal(refused.success, false);
+  assert.equal(server.commands.length, 0, 'nothing sent to OctoPrint');
 
   const idle = await fake.setValue(device, feature('pause'), 1);
   assert.equal(idle.success, false);
@@ -124,6 +123,7 @@ test('setpoints and buttons of the device box', async (t) => {
   await settle();
   assert.equal((await fake.setValue(device, feature('pause'), 1)).success, true);
   assert.deepEqual(server.commands.at(-1).body, { command: 'pause', action: 'pause' });
+  assert.equal(fake.lastState(featureId('tool0_target')), 210);
 
   const readOnly = await fake.setValue(device, feature('progress'), 3);
   assert.equal(readOnly.success, false);
@@ -377,15 +377,18 @@ test('Connect: an address changed while waiting never receives the key', async (
   assert.match(fake.connectionStatus.message.en, /Printer 1: click Connect/);
 });
 
-test('a setpoint on a printer disconnected from OctoPrint says so', async (t) => {
+test('preheating a printer disconnected from OctoPrint says so', async (t) => {
   const world = await createWorld({ octoprints: [createOctoPrint({ state: 'offline' })] });
   t.after(() => world.app.stop());
-  const fake = world.gladys.fake;
-  const device = fake.discoveredDevices[0];
-  const feature = device.features.find((f) => f.external_id === featureId('bed_target'));
-  const ack = await fake.setValue(device, feature, 60);
-  assert.equal(ack.success, false);
-  assert.equal(ack.error, "L'imprimante n'est pas connectée à OctoPrint.");
+  const ack = await world.gladys.fake.widgetAction(
+    'printer',
+    'preheat',
+    {},
+    {
+      settings: { device: deviceId(1) },
+    },
+  );
+  assert.equal(ack.data.message.fr, "L'imprimante n'est pas connectée à OctoPrint.");
 });
 
 test('an older REST answer never overrides a newer one', async (t) => {

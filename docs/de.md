@@ -61,13 +61,17 @@ sofort).
 | Verstrichene Zeit        | In Minuten                                                                                                                                                                             |
 | Restzeit                 | Von OctoPrint geschätzt, in Minuten (0 im Leerlauf)                                                                                                                                    |
 | Düse, Druckbett, Bauraum | Temperaturen in ganzen Grad; eine Düse pro Extruder, der Bauraum nur, wenn das Druckerprofil einen beheizten Bauraum angibt                                                            |
-| … (Soll)                 | Solltemperaturen: im Dashboard änderbar (Düse 0 bis 350 °C, Druckbett 0 bis 150 °C, Bauraum 0 bis 100 °C)                                                                              |
+| … (Soll)                 | Solltemperaturen, nur lesbar: Heizen über das Widget oder die Szenenaktionen                                                                                                           |
 | Pausieren, Fortsetzen    | Druckknöpfe                                                                                                                                                                            |
 | Webcam                   | Das Webcam-Bild über OctoPrint (wenn eine Webcam mit Schnappschuss eingerichtet ist)                                                                                                   |
 
 Es gibt absichtlich keine **Abbrechen**-Taste am Gerät: Ein Tippen ohne
 Bestätigung würde einen Druck ruinieren. Abbrechen bieten das Widget (mit
-Bestätigung) und die Szenen.
+Bestätigung) und die Szenen. Auch Temperaturen und Solltemperaturen sind nur
+lesbar: Eine Druckerheizung lässt sich weder versehentlich im Dashboard noch
+über HomeKit, Alexa oder Google einschalten. Geheizt wird über das Widget
+(Vorheizen, Abkühlen) und die Szenenaktionen. Für Gladys sind das
+„Gerätetemperaturen“, die nie zur Raumtemperatur zählen.
 
 Was der Drucker hat (Düsen, beheiztes Druckbett und Bauraum, Webcam), kommt
 aus dem aktiven Druckerprofil von OctoPrint. Ändert es sich, bietet Gladys im
