@@ -68,6 +68,12 @@ test('every state renders within the budget, with the buttons that make sense', 
       assert.deepEqual(buttons(content), keys, `${state} ${language}`);
     }
   }
+  // Finishing: a few milliseconds, nothing left to pause.
+  server.setState('printing');
+  server.printer.state.flags.finishing = true;
+  server.pushCurrent();
+  await settle();
+  assert.deepEqual(buttons(await get(world, settings)), []);
   // Cancelling asks first, in the danger style.
   server.setState('printing');
   await settle();

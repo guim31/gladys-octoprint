@@ -101,7 +101,9 @@ export class Hub {
       if (!next || next.url !== printer.url || next.apiKey !== printer.apiKey) {
         printer.link.stop();
         this.printers.delete(slot);
-        if (this.linking.get(slot) !== 'waiting') {
+        if (!next || next.url !== printer.url) {
+          this.#cancelLink(slot);
+        } else if (this.linking.get(slot) !== 'waiting') {
           this.linking.delete(slot);
         }
       }
@@ -488,20 +490,55 @@ export class Hub {
         `Printer ${slot ?? '?'}: enter and save the address of OctoPrint before connecting.`,
       );
     }
+    // Registered before any await: a second click aborts this flow, whatever
+    // its progress, and only the latest flow of a slot may change its status.
     this.linkAborts.get(slot)?.abort();
-    const { appToken, approvalUrl } = await requestAppKey({
-      baseUrl: printer.url,
-      fetch: this.fetch,
-    });
     const abort = new AbortController();
     this.linkAborts.set(slot, abort);
+    let request;
+    try {
+      request = await requestAppKey({ baseUrl: printer.url, fetch: this.fetch });
+    } catch (err) {
+      if (this.linkAborts.get(slot) === abort) {
+        this.linkAborts.delete(slot);
+        this.linking.delete(slot);
+        await this.updateConnectionStatus();
+      }
+      throw err;
+    }
+    if (abort.signal.aborted) {
+      throw new Error(`Printer ${slot}: replaced by a newer access request.`);
+    }
     this.linking.set(slot, 'waiting');
     await this.updateConnectionStatus();
-    this.linkDone = this.#awaitDecision(slot, printer.url, appToken, abort.signal);
-    return approvalUrl;
+    this.linkDone = this.#awaitDecision(slot, printer.url, request.appToken, abort).catch((err) =>
+      logger.error(`Printer ${slot}: access request flow failed`, err),
+    );
+    return request.approvalUrl;
   }
 
-  async #awaitDecision(slot, url, appToken, signal) {
+  /** Stop the Connect flow of a slot (address changed, slot removed). */
+  #cancelLink(slot) {
+    const abort = this.linkAborts.get(slot);
+    if (abort) {
+      abort.abort();
+      this.linkAborts.delete(slot);
+    }
+    this.linking.delete(slot);
+  }
+
+  async #awaitDecision(slot, url, appToken, abort) {
+    const { signal } = abort;
+    const current = () => !signal.aborted && !this.stopped && this.linkAborts.get(slot) === abort;
+    const finish = async (outcome) => {
+      this.linkAborts.delete(slot);
+      if (outcome) {
+        this.linking.set(slot, outcome);
+      } else {
+        this.linking.delete(slot);
+      }
+      await this.updateConnectionStatus();
+    };
     let apiKey = null;
     try {
       apiKey = await waitForAppKey({
@@ -512,18 +549,23 @@ export class Hub {
         ...this.appKeyTimings,
       });
     } catch (err) {
-      logger.warn(`Printer ${slot}: access request failed (${err.message})`);
-      this.linking.set(slot, 'failed');
-      await this.updateConnectionStatus();
+      if (current()) {
+        logger.warn(`Printer ${slot}: access request failed (${err.message})`);
+        await finish('linkFailed');
+      }
       return;
     }
-    if (signal.aborted || this.stopped) {
+    if (!current()) {
       return;
     }
-    this.linkAborts.delete(slot);
     if (!apiKey) {
-      this.linking.set(slot, 'denied');
-      await this.updateConnectionStatus();
+      await finish('denied');
+      return;
+    }
+    // The address may have changed meanwhile: never hand this key to another host.
+    const printer = this.config.printers.find((p) => p.slot === slot);
+    if (!printer || printer.url !== url) {
+      await finish(null);
       return;
     }
     try {
@@ -531,11 +573,11 @@ export class Hub {
       await this.gladys.setConfig({ [apiKeyKey(slot)]: apiKey });
     } catch (err) {
       logger.error(`Printer ${slot}: cannot save the API key`, err);
-      this.linking.set(slot, 'failed');
-      await this.updateConnectionStatus();
+      await finish('linkFailed');
       return;
     }
     logger.info(`Printer ${slot}: access granted in OctoPrint, API key saved`);
+    this.linkAborts.delete(slot);
     this.linking.delete(slot);
     const printers = this.config.printers.map((p) => (p.slot === slot ? { ...p, apiKey } : p));
     await this.reconfigure({ ...this.config, printers });

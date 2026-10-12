@@ -180,7 +180,7 @@ export function buildContent(hub, { settings = {}, language = 'en', units = 'met
 
   const cancel = button(lang, 'cancel', 'x-circle', { style: 'danger' });
   cancel.action.confirm = true;
-  if (['printing', 'resuming', 'finishing'].includes(snapshot.state)) {
+  if (['printing', 'resuming'].includes(snapshot.state)) {
     components.push(button(lang, 'pause', 'pause'), cancel);
   } else if (['paused', 'pausing'].includes(snapshot.state)) {
     components.push(button(lang, 'resume', 'play'), cancel);

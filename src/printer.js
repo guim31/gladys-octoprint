@@ -163,6 +163,9 @@ export class PrinterLink extends EventEmitter {
   }
 
   #fail(err) {
+    if (!this.running) {
+      return;
+    }
     const state = err?.kind === 'unauthorized' ? 'unauthorized' : 'unreachable';
     if (this.lastError !== err.message) {
       logger.warn(`Printer ${this.slot}: ${err.message}`);
@@ -184,10 +187,17 @@ export class PrinterLink extends EventEmitter {
 
   /** Read the REST API now (the fallback path, and Gladys' onPoll). */
   async refresh() {
-    if (!this.connected) {
+    if (!this.connected || !this.running) {
       return;
     }
+    // Reads may overlap (poll, command, Gladys' onPoll): an answer older than
+    // the last one applied is dropped, or a stale state would fire an event.
+    const sequence = (this.readSequence = (this.readSequence ?? 0) + 1);
     const [printer, job] = await Promise.all([this.client.getPrinter(), this.client.getJob()]);
+    if (sequence < (this.appliedSequence ?? 0) || !this.running) {
+      return;
+    }
+    this.appliedSequence = sequence;
     this.#setSnapshot(fromRest(printer, job), { deriveEvents: !this.push.live });
   }
 
@@ -232,6 +242,9 @@ export class PrinterLink extends EventEmitter {
   }
 
   #setSnapshot(next, { deriveEvents = false } = {}) {
+    if (!this.running) {
+      return; // a replaced link must not publish over its successor
+    }
     const previous = this.snapshot;
     this.snapshot = next;
     if (deriveEvents) {
@@ -280,6 +293,9 @@ export class PrinterLink extends EventEmitter {
     } catch (err) {
       if (err.kind === 'conflict') {
         // OctoPrint knows better than our last snapshot.
+        if (name === 'targets') {
+          throw codedError('offline', err.message); // printer not connected to OctoPrint
+        }
         throw codedError(name === 'resume' ? 'not_paused' : 'not_printing', err.message);
       }
       if (err.kind === 'unreachable' || err.kind === 'unauthorized') {

@@ -311,3 +311,108 @@ test('the widget refresh nudges respect the core limit of one per 10 s', async (
   world.hub.refreshWidget();
   assert.equal(fake.widgetRefreshes.length, count + 1);
 });
+
+test('Connect: OctoPrint lost while waiting, or the key cannot be saved', async (t) => {
+  const server = createOctoPrint();
+  const world = await createWorld({ octoprints: [server], config: { url_1: server.url } });
+  t.after(() => world.app.stop());
+  const fake = world.gladys.fake;
+  await fake.oauthAuthorizeUrl('link_1');
+  server.down = true;
+  await world.hub.linkDone;
+  await settle();
+  assert.match(fake.connectionStatus.message.en, /Printer 1: the access request failed/);
+  // Later status updates keep working (no exception on that state).
+  server.down = false;
+  await world.hub.updateConnectionStatus();
+
+  t.mock.method(world.gladys, 'setConfig', async () => {
+    throw new Error('422');
+  });
+  server.decision = 'pending';
+  await fake.oauthAuthorizeUrl('link_1');
+  server.decision = 'granted';
+  await world.hub.linkDone;
+  await settle();
+  assert.match(fake.connectionStatus.message.fr, /la demande d'accès a échoué/);
+});
+
+test('Connect: a second click replaces the first flow; a refused request clears the wait', async (t) => {
+  const server = createOctoPrint();
+  const world = await createWorld({ octoprints: [server], config: { url_1: server.url } });
+  t.after(() => world.app.stop());
+  server.apiKey = GRANTED_KEY;
+  const fake = world.gladys.fake;
+  const [first, second] = await Promise.all([
+    fake.oauthAuthorizeUrl('link_1'),
+    fake.oauthAuthorizeUrl('link_1'),
+  ]);
+  assert.equal([first, second].filter((ack) => ack.success).length, 1, 'one flow kept');
+  server.decision = 'granted';
+  await world.hub.linkDone;
+  await settle();
+  assert.deepEqual(fake.connectionStatus, { connected: true });
+
+  // Rate limited by OctoPrint (4th request in a minute): no stale "waiting".
+  server.appKeyRequests = 3;
+  const limited = await fake.oauthAuthorizeUrl('link_1');
+  assert.equal(limited.success, false);
+  assert.match(limited.error, /HTTP 429/);
+  assert.deepEqual(fake.connectionStatus, { connected: true });
+});
+
+test('Connect: an address changed while waiting never receives the key', async (t) => {
+  const a = createOctoPrint({ host: '192.0.2.10' });
+  const b = createOctoPrint({ host: '192.0.2.11' });
+  const world = await createWorld({ octoprints: [a, b], config: { url_1: a.url } });
+  t.after(() => world.app.stop());
+  const fake = world.gladys.fake;
+  await fake.oauthAuthorizeUrl('link_1');
+  await fake.configUpdated({ url_1: b.url });
+  a.decision = 'granted';
+  await world.hub.linkDone;
+  await settle();
+  assert.equal(fake.config.api_key_1, undefined, 'no key saved');
+  assert.ok(!b.requests.some((r) => r.key === GRANTED_KEY), 'host B never saw the key');
+  assert.match(fake.connectionStatus.message.en, /Printer 1: click Connect/);
+});
+
+test('a setpoint on a printer disconnected from OctoPrint says so', async (t) => {
+  const world = await createWorld({ octoprints: [createOctoPrint({ state: 'offline' })] });
+  t.after(() => world.app.stop());
+  const fake = world.gladys.fake;
+  const device = fake.discoveredDevices[0];
+  const feature = device.features.find((f) => f.external_id === featureId('bed_target'));
+  const ack = await fake.setValue(device, feature, 60);
+  assert.equal(ack.success, false);
+  assert.equal(ack.error, "L'imprimante n'est pas connectée à OctoPrint.");
+});
+
+test('an older REST answer never overrides a newer one', async (t) => {
+  const server = createOctoPrint({ websocket: false, state: 'paused' });
+  const world = await createWorld({
+    octoprints: [server],
+    timings: { pollInterval: 60_000, retryDelay: 50, cameraInterval: 60_000 },
+  });
+  t.after(() => world.app.stop());
+  const link = world.hub.printers.get(1).link;
+  const events = [];
+  link.on('print', (e) => events.push(e.type));
+  // A slow read started while paused, then a fast one after the resume.
+  const realFetch = server.fetch;
+  let slow = true;
+  server.fetch = async (url, init) => {
+    const answer = await realFetch(url, init);
+    if (slow && url.endsWith('/api/job')) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+    return answer;
+  };
+  const stale = link.refresh();
+  slow = false;
+  server.setState('printing');
+  await link.refresh();
+  await stale;
+  assert.equal(link.snapshot.state, 'printing');
+  assert.deepEqual(events, []);
+});

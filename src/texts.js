@@ -158,6 +158,7 @@ export function formatDuration(seconds, language) {
 /** Why a command was refused; thrown to Gladys or shown as a widget toast. */
 export const COMMAND_ERRORS = {
   en: {
+    offline: 'The printer is not connected to OctoPrint.',
     not_printing: 'No print in progress.',
     not_paused: 'The print is not paused.',
     printing: 'A print is in progress: temperatures left unchanged.',
@@ -169,6 +170,7 @@ export const COMMAND_ERRORS = {
     no_camera: 'No webcam with snapshots in OctoPrint.',
   },
   fr: {
+    offline: "L'imprimante n'est pas connectée à OctoPrint.",
     not_printing: 'Aucune impression en cours.',
     not_paused: "L'impression n'est pas en pause.",
     printing: 'Une impression est en cours : températures inchangées.',
@@ -180,6 +182,7 @@ export const COMMAND_ERRORS = {
     no_camera: 'Aucune webcam avec capture dans OctoPrint.',
   },
   de: {
+    offline: 'Der Drucker ist nicht mit OctoPrint verbunden.',
     not_printing: 'Kein Druck aktiv.',
     not_paused: 'Der Druck ist nicht pausiert.',
     printing: 'Ein Druck läuft: Temperaturen unverändert.',
@@ -191,6 +194,7 @@ export const COMMAND_ERRORS = {
     no_camera: 'Keine Webcam mit Schnappschuss in OctoPrint.',
   },
   es: {
+    offline: 'La impresora no está conectada a OctoPrint.',
     not_printing: 'No hay ninguna impresión en curso.',
     not_paused: 'La impresión no está en pausa.',
     printing: 'Hay una impresión en curso: temperaturas sin cambios.',
