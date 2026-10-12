@@ -365,6 +365,20 @@ export function deriveEventsFromStates(previous, next) {
       reason: null,
     });
   }
+  // A whole print between two reads (shorter than the poll interval): idle on
+  // both sides, but a new finished job in /api/job.
+  const idle = (state) => ['operational', 'offline'].includes(state);
+  if (
+    idle(previous.state) &&
+    idle(next.state) &&
+    next.progress === 100 &&
+    next.printTime !== null &&
+    (previous.progress !== 100 ||
+      previous.printTime !== next.printTime ||
+      previous.file !== next.file)
+  ) {
+    events.push({ type: 'done', file, seconds: next.printTime, reason: null });
+  }
   if (wasActive && !isActive && !['unreachable', 'unauthorized'].includes(next.state)) {
     const seconds = next.printTime ?? previous.printTime;
     if (next.state === 'error' || next.state === 'offline') {

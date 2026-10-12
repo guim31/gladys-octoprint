@@ -446,6 +446,10 @@ export class Hub {
       if (err.code === 'camera_format' || err.code === 'camera_size') {
         throw new CommandError(err.code, this.language);
       }
+      if (err.kind === 'not_found') {
+        // No webcam anymore in OctoPrint (until the next connection says so).
+        throw new CommandError('no_camera', this.language);
+      }
       throw new CommandError('unreachable', this.language);
     }
   }

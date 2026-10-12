@@ -21,6 +21,7 @@ test('every recorded state is read from the REST answers', () => {
     done: 'operational',
     cancelled: 'operational',
     offline: 'offline',
+    error: 'error',
   };
   for (const [name, state] of Object.entries(expected)) {
     const [printer, job] = STATES[name]();
@@ -42,6 +43,12 @@ test('a printing snapshot carries the file, the progress and the temperatures', 
   );
   assert.equal(long.printTimeLeft, 12354);
   assert.equal(long.file, null);
+});
+
+test('after an emergency stop: Offline after error, with its message', () => {
+  const snapshot = fromRest(...STATES.error());
+  assert.equal(snapshot.state, 'error');
+  assert.equal(snapshot.error, 'Closing serial port due to emergency stop M112.');
 });
 
 test('after a finished print the job keeps 100 %, after a cancellation it is cleared', () => {

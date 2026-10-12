@@ -139,7 +139,8 @@ the `docker_image` tag) must be bumped and committed before tagging. See
 - [OctoPrint](https://github.com/OctoPrint/OctoPrint) by Gina Häußge and
   contributors (AGPL-3.0), and its [REST API documentation](https://docs.octoprint.org/en/master/api/).
   The other fixtures were recorded on the official `octoprint/octoprint` image
-  with its virtual printer.
+  with its virtual printer. The cover uses the OctoPrint logo
+  (`src/octoprint/static/img/logo.png` of the OctoPrint repository).
 
 ## Disclaimer
 

@@ -246,6 +246,8 @@ test('three printers; the webcam image is pulled, and pushed once the device exi
   assert.match((await fake.getImage(dual)).error, /dépasse 150 Ko/);
   servers[1].image = Buffer.from('89504e470d0a', 'hex');
   assert.match((await fake.getImage(dual)).error, /pas un JPEG/);
+  servers[1].image = null;
+  assert.match((await fake.getImage(dual)).error, /Aucune webcam/);
 });
 
 test('a restart while OctoPrint is off still publishes the known device', async (t) => {

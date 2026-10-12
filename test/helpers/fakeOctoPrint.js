@@ -31,6 +31,8 @@ export const STATES = {
   done: () => [fixture('printer-done.json'), fixture('job-done.json')],
   cancelled: () => [fixture('printer-cancelled.json'), fixture('job-cancelled.json')],
   offline: () => [null, fixture('job-offline.json')],
+  // After an emergency stop (M112) during a print.
+  error: () => [null, fixture('job-offline-error.json')],
 };
 
 const json = (status, body, headers = {}) =>

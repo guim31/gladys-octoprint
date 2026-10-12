@@ -137,7 +137,7 @@ export function fromRest(printer, job) {
   const state = printer?.state ?? { text: typeof job?.state === 'string' ? job.state : '' };
   return {
     state: stateCode(state),
-    error: typeof printer?.state?.error === 'string' ? printer.state.error : '',
+    error: [printer?.state?.error, job?.error].find((e) => typeof e === 'string' && e) ?? '',
     temperatures: readTemperatures(printer?.temperature),
     ...readJob(job?.job, job?.progress),
   };

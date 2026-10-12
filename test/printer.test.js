@@ -97,7 +97,16 @@ test('without WebSocket, the REST API is polled and events derived from the stat
   link.start();
   await settle();
   assert.equal(link.push.live, false);
-  for (const state of ['printing', 'paused', 'printing', 'done', 'printing', 'cancelled']) {
+  for (const state of [
+    'printing',
+    'paused',
+    'printing',
+    'done',
+    'printing',
+    'cancelled',
+    'printing',
+    'error',
+  ]) {
     server.setState(state);
     await wait(80);
   }
@@ -109,6 +118,8 @@ test('without WebSocket, the REST API is polled and events derived from the stat
       ['done', null],
       ['started', null],
       ['failed', 'cancelled'],
+      ['started', null],
+      ['failed', 'error'],
     ],
   );
 });
@@ -132,6 +143,12 @@ test('derived events: finishing, error and a disconnection mid-print', () => {
     ]),
     [['failed', 'error']],
   );
+  // A print shorter than the poll interval: only its finished job is seen.
+  const idle = snap('cancelled');
+  assert.deepEqual(deriveEventsFromStates(idle, snap('done')), [
+    { type: 'done', file: 'short.gcode', seconds: 8, reason: null },
+  ]);
+  assert.deepEqual(deriveEventsFromStates(snap('done'), snap('done')), [], 'not twice');
   // OctoPrint itself unreachable: nothing is known, nothing is fired.
   assert.deepEqual(deriveEventsFromStates(printing, { ...printing, state: 'unreachable' }), []);
   assert.deepEqual(deriveEventsFromStates({ ...printing, state: 'unreachable' }, printing), []);
