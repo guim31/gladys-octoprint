@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-12
+
 ### Added
 
 - One Gladys device per OctoPrint instance, up to three: state, file, progress,
@@ -32,4 +34,5 @@ the notes of the version's GitHub Release.
   printer needs attention.
 - English, French, German and Spanish texts and documentation.
 
-[Unreleased]: https://github.com/guim31/gladys-octoprint/commits/main
+[Unreleased]: https://github.com/guim31/gladys-octoprint/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/guim31/gladys-octoprint/releases/tag/v1.0.0
