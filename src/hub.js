@@ -18,6 +18,7 @@ import {
 import { requestAppKey, waitForAppKey } from './octoprint/appkeys.js';
 import { ACTIVE_STATES, sameStructure } from './octoprint/model.js';
 import { PrinterLink } from './printer.js';
+import { ProblemLog } from './problems.js';
 import { STATE_LABELS, STATUS_TEXT, TEST_TEXT, commandMessage, formatDuration } from './texts.js';
 
 const logger = createLogger({ name: 'octoprint-hub' });
@@ -79,6 +80,8 @@ export class Hub {
     this.widgetRefreshAt = 0;
     this.widgetTimer = null;
     this.stopped = false;
+    // Refusals of Gladys repeated on every update: one line, not one per snapshot.
+    this.problems = new ProblemLog(logger);
   }
 
   get language() {
@@ -217,11 +220,17 @@ export class Hub {
       return;
     }
     const states = buildStates(this.gladys, printer, printer.link.snapshot, this.language);
+    const key = `states:${printer.slot}`;
     try {
       await this.gladys.publishChangedStates(states);
     } catch (err) {
-      logger.warn(`Cannot publish the states of printer ${printer.slot}: ${err.message}`);
+      this.problems.fail(
+        key,
+        `Cannot publish the states of printer ${printer.slot}: ${err.message}`,
+      );
+      return;
     }
+    this.problems.recover(key, `Printer ${printer.slot}: states published again`);
   }
 
   async publishAllStates() {
@@ -363,8 +372,12 @@ export class Hub {
     try {
       await this.gladys.setConnectionStatus(connected, message ?? undefined);
     } catch (err) {
-      logger.warn(`Cannot set the connection status: ${err.message}`);
+      this.problems.fail('status', `Cannot set the connection status: ${err.message}`);
+      // Not sent: the next update tries again instead of skipping it as unchanged.
+      this.lastStatus = '';
+      return;
     }
+    this.problems.recover('status', 'Connection status set again');
   }
 
   // --- Commands -----------------------------------------------------------
