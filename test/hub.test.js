@@ -4,6 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { API_KEY, GRANTED_KEY, createOctoPrint, fixture, settle } from './helpers/fakeOctoPrint.js';
+import { captureLogs } from './helpers/logs.js';
 import { createWorld, deviceId, featureId } from './helpers/world.js';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -418,4 +419,88 @@ test('an older REST answer never overrides a newer one', async (t) => {
   await stale;
   assert.equal(link.snapshot.state, 'printing');
   assert.deepEqual(events, []);
+});
+
+test('a normal cycle writes nothing at the info level, push or REST', async (t) => {
+  const pushed = await createWorld();
+  t.after(() => pushed.app.stop());
+  const polled = await createWorld({ octoprints: [createOctoPrint({ websocket: false })] });
+  t.after(() => polled.app.stop());
+  await wait(150); // past the first push failure of the REST-only instance
+  const logs = captureLogs(t);
+  const [server] = pushed.servers;
+  for (const state of ['printing', 'printing', 'paused', 'paused', 'operational']) {
+    server.setState(state);
+    await settle();
+  }
+  await wait(300); // REST reads every 50 ms, push link attempts every 100 ms
+  assert.ok(polled.servers[0].requests.filter((r) => r.path === '/api/job').length > 3);
+  assert.deepEqual(logs.stop(), []);
+});
+
+test('a refusal of Gladys repeated on every update writes one line, and one when it ends', async (t) => {
+  const world = await createWorld();
+  t.after(() => world.app.stop());
+  const [server] = world.servers;
+  const logs = captureLogs(t);
+  const real = world.gladys.publishChangedStates.bind(world.gladys);
+  const refuse = t.mock.method(world.gladys, 'publishChangedStates', async () => {
+    throw new Error('Gladys refused');
+  });
+  for (const state of ['printing', 'paused', 'printing', 'paused', 'printing']) {
+    server.setState(state);
+    await settle();
+  }
+  assert.equal(refuse.mock.callCount(), 5);
+  refuse.mock.mockImplementation(real);
+  server.setState('operational');
+  await settle();
+  server.setState('printing');
+  await settle();
+  const lines = logs.stop();
+  assert.equal(lines.length, 2, lines.join('\n'));
+  assert.match(lines[0], /\[WARN\].*Cannot publish the states of printer 1: Gladys refused/);
+  assert.match(lines[1], /\[INFO\].*Printer 1: states published again/);
+  assert.equal(world.gladys.fake.lastState(featureId('state')), 'Impression');
+});
+
+test('a refused connection status is logged once and sent again on the next change', async (t) => {
+  const world = await createWorld();
+  t.after(() => world.app.stop());
+  const [server] = world.servers;
+  const logs = captureLogs(t);
+  const real = world.gladys.setConnectionStatus.bind(world.gladys);
+  const refuse = t.mock.method(world.gladys, 'setConnectionStatus', async () => {
+    throw new Error('Gladys refused');
+  });
+  server.down = true;
+  server.dropSockets();
+  await wait(150);
+  server.down = false;
+  await wait(150);
+  assert.equal(refuse.mock.callCount(), 2, 'lost, then back: both refused');
+  refuse.mock.mockImplementation(real);
+  const sent = world.gladys.fake.connectionStatuses.length;
+  await world.hub.updateConnectionStatus(); // no change since the refusal
+  assert.equal(world.gladys.fake.connectionStatuses.length, sent + 1, 'not skipped as unchanged');
+  assert.deepEqual(world.gladys.fake.connectionStatus, { connected: true });
+  const lines = logs.stop().filter((line) => line.includes('onnection status'));
+  assert.equal(lines.length, 2, lines.join('\n'));
+  assert.match(lines[0], /\[WARN\].*Cannot set the connection status: Gladys refused/);
+  assert.match(lines[1], /\[INFO\].*Connection status set again/);
+});
+
+test('without onPoll and without the push link, the REST timer publishes the changes', async (t) => {
+  const world = await createWorld({ octoprints: [createOctoPrint({ websocket: false })] });
+  t.after(() => world.app.stop());
+  const fake = world.gladys.fake;
+  const poll = t.mock.method(world.hub, 'poll');
+  assert.equal(fake.discoveredDevices[0].should_poll, false);
+  assert.equal(world.hub.printers.get(1).link.push.live, false);
+  assert.equal(fake.lastState(featureId('state')), 'Opérationnelle');
+  world.servers[0].setState('printing');
+  await wait(150); // pollInterval: 50 ms in the tests (10 s in production)
+  assert.equal(fake.lastState(featureId('state')), 'Impression');
+  assert.equal(fake.lastState(featureId('file')), 'benchy-mini.gcode');
+  assert.equal(poll.mock.callCount(), 0, 'Gladys never polled');
 });

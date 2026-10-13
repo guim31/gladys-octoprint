@@ -118,6 +118,15 @@ code de ce dépôt. Compléter ce fichier quand un nouveau piège est découvert
   15000, 30000, 60000). Le template publie `poll_frequency: 300` sans `should_poll` : c'est faux,
   le cœur répond 400 à la découverte. Pour une cadence hors liste, publier `should_poll: false` et
   pousser les états depuis le conteneur, en gardant un `onPoll` de repli.
+  Issue GladysAssistant/Gladys#3198 (correctif #3199 non publié) : les appareils déjà créés sans
+  `should_poll` ne seront jamais sondés, même après correction : ne jamais dépendre du seul
+  `onPoll`. Ici, le minuteur REST de `src/printer.js` prend le relais quand le lien push tombe
+  (test « without onPoll and without the push link… »).
+- **Logs** : le niveau info ne garde que le cycle de vie (démarrage, connexion à OctoPrint, lien
+  push ouvert ou fermé, événements d'impression, une ligne par action). Les erreurs répétées
+  s'écrivent une fois au début (et au retour, si utile) : `src/problems.js` (`ProblemLog`), ou le
+  `lastError` / `cameraError` déjà en place. Le reste passe en `debug` (`LOG_LEVEL=debug`). Un
+  test vérifie qu'un cycle normal n'écrit rien en info.
 - **`min` et `max` sont NOT NULL** dans `t_device_feature`, y compris pour `text/text` : sans eux,
   « Ajouter à Gladys » échoue en HTTP 422. Mettre 0/0, comme Zigbee2MQTT.
 - Un état publié sur une fonctionnalité **pas encore ajoutée** dans Gladys reçoit un 200 puis est

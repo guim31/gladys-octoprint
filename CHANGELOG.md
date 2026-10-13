@@ -10,6 +10,20 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+### Changed
+
+- Quieter logs: when the live link to OctoPrint cannot be opened (a reverse
+  proxy without WebSocket, an OctoPrint that stays silent), one line is written
+  when the problem starts instead of one every few attempts, and none every
+  minute. A refusal of Gladys to take the states or the connection status of a
+  printer is written once, then once more when it works again, instead of at
+  every update.
+
+### Fixed
+
+- A connection status refused once by Gladys is sent again at the next update,
+  instead of waiting for the status to change.
+
 ## [1.0.0] - 2026-10-12
 
 ### Added

@@ -54,6 +54,8 @@ export class PushLink extends EventEmitter {
       return;
     }
     this.running = true;
+    // A new outage after a restart is logged again (see #scheduleRetry).
+    this.failures = 0;
     this.#open();
   }
 
@@ -132,10 +134,11 @@ export class PushLink extends EventEmitter {
   #armIdle() {
     clearTimeout(this.idleTimer);
     this.idleTimer = setTimeout(() => {
-      logger.warn(`No message from ${this.client.baseUrl} for a while, reconnecting`);
+      // Logged by #scheduleRetry: once per outage, not once per silent minute
+      // (an OctoPrint that accepts the socket but never pushes would repeat).
       this.#drop();
       this.#setLive(false);
-      this.#scheduleRetry('idle');
+      this.#scheduleRetry(`no message for ${Math.round(this.timings.idleTimeout / 1000)} s`);
     }, this.timings.idleTimeout);
     this.idleTimer.unref?.();
   }
@@ -176,8 +179,14 @@ export class PushLink extends EventEmitter {
       this.timings.reconnectMax,
       this.timings.reconnectMin * 2 ** Math.min(this.failures - 1, 10),
     );
-    if (this.failures === 1 || this.failures % 10 === 0) {
-      logger.info(`Push link to ${this.client.baseUrl} down (${reason}), retrying in ${delay} ms`);
+    // One line per outage (the counter is reset once the link is live again,
+    // which printer.js reports as "live link open"); the attempts in debug.
+    // baseUrl never holds credentials: normalizeUrl (config.js) refuses them.
+    const line = `Push link to ${this.client.baseUrl} down (${reason}), retrying in ${delay} ms`;
+    if (this.failures === 1) {
+      logger.warn(line);
+    } else {
+      logger.debug(line);
     }
     clearTimeout(this.retryTimer);
     this.retryTimer = setTimeout(() => {

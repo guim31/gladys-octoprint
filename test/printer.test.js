@@ -3,7 +3,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { deriveEventsFromStates, PrinterLink } from '../src/printer.js';
 import { fromRest } from '../src/octoprint/model.js';
+import { PushLink } from '../src/octoprint/socket.js';
 import { API_KEY, STATES, createOctoPrint, fixture, settle } from './helpers/fakeOctoPrint.js';
+import { captureLogs } from './helpers/logs.js';
 import { FAST_SOCKET, FAST_TIMINGS } from './helpers/world.js';
 
 function linkTo(server, options = {}) {
@@ -210,5 +212,48 @@ test('commands check the state first, and map the 409 of OctoPrint', async (t) =
   assert.deepEqual(
     server.commands.slice(-2).map((c) => c.path),
     ['/api/printer/tool', '/api/printer/bed'],
+  );
+});
+
+test('a push link that never comes up writes one line, not one per attempt', async (t) => {
+  // OctoPrint accepts the socket, then stays silent: the idle watchdog drops
+  // it every time. And a login refused: the retries back off.
+  const silentSocket = () => {
+    const socket = { send() {}, close() {} };
+    setImmediate(() => socket.onopen?.());
+    return socket;
+  };
+  const silent = new PushLink({
+    client: { baseUrl: 'http://192.0.2.10', login: async () => ({ name: 'a', session: 'b' }) },
+    createSocket: silentSocket,
+    timings: { idleTimeout: 20, reconnectMin: 5, reconnectMax: 10 },
+  });
+  const refused = new PushLink({
+    client: {
+      baseUrl: 'http://192.0.2.11',
+      login: async () => {
+        throw new Error('OctoPrint answered 403');
+      },
+    },
+    timings: { reconnectMin: 5, reconnectMax: 10 },
+  });
+  t.after(() => {
+    silent.stop();
+    refused.stop();
+  });
+  const logs = captureLogs(t);
+  silent.start();
+  refused.start();
+  await wait(300);
+  assert.ok(silent.failures >= 5 && refused.failures >= 5, 'several attempts');
+  const lines = logs.stop();
+  assert.equal(lines.length, 2, lines.join('\n'));
+  assert.match(
+    lines.find((l) => l.includes('192.0.2.10')),
+    /\[WARN\].*no message for 0 s/,
+  );
+  assert.match(
+    lines.find((l) => l.includes('192.0.2.11')),
+    /\[WARN\].*login refused \(OctoPrint/,
   );
 });
