@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-13
+
 ### Changed
 
 - Quieter logs: when the live link to OctoPrint cannot be opened (a reverse
@@ -48,5 +50,6 @@ the notes of the version's GitHub Release.
   printer needs attention.
 - English, French, German and Spanish texts and documentation.
 
-[Unreleased]: https://github.com/guim31/gladys-octoprint/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/guim31/gladys-octoprint/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/guim31/gladys-octoprint/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/guim31/gladys-octoprint/releases/tag/v1.0.0
