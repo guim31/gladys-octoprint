@@ -1,6 +1,6 @@
 {
   "name": "gladys-octoprint",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "OctoPrint integration for Gladys Assistant: follow and control 3D prints.",
   "type": "module",
