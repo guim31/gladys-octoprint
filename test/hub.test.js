@@ -240,7 +240,7 @@ test('three printers; the webcam image is pulled, and pushed once the device exi
 
   await fake.deviceCreated(dual);
   await settle();
-  assert.equal(fake.cameraImages.at(-1).device_external_id, featureId('camera', 2));
+  assert.equal(fake.cameraImages.at(-1).device_external_id, deviceId(2));
 
   // Too large for Gladys, or not a JPEG: a clear message.
   servers[1].image = Buffer.concat([JPEG, Buffer.alloc(150 * 1024)]);
