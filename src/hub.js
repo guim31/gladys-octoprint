@@ -471,7 +471,7 @@ export class Hub {
     }
     try {
       const image = await printer.link.cameraImage(MAX_IMAGE_BYTES);
-      await this.gladys.publishCameraImage(ids.feature('camera'), image);
+      await this.gladys.publishCameraImage(ids.device, image);
     } catch (err) {
       if (printer.cameraError !== err.message) {
         logger.warn(`Printer ${printer.slot}: no webcam image (${err.message})`);
